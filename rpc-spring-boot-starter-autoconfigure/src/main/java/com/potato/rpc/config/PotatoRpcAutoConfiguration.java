@@ -9,6 +9,7 @@ import com.potato.rpc.properties.PotatoRpcConfigProperties;
 import com.potato.rpc.protocol.PotatoClient;
 import com.potato.rpc.protocol.netty.client.NettyClient;
 import com.potato.rpc.proxy.ClientProxyFactory;
+import com.potato.rpc.register.RegistryFactory;
 import com.potato.rpc.register.ServiceRegistry;
 import com.potato.rpc.register.zk.ZookeeperRegistry;
 import com.potato.rpc.serializer.SerializerFactory;
@@ -43,6 +44,7 @@ public class PotatoRpcAutoConfiguration {
         ServiceRegistry serviceRegistry = new ZookeeperRegistry(registryConfig);
         serviceRegistry.init();
         serviceRegistry.start();
+        RegistryFactory.put(registryConfig,serviceRegistry);
         return serviceRegistry;
     }
     @Bean

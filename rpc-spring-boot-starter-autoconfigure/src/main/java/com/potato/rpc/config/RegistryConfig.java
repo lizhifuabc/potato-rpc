@@ -45,4 +45,13 @@ public class RegistryConfig implements Serializable {
     public void setConnectTimeout(int connectTimeout) {
         this.connectTimeout = connectTimeout;
     }
+
+    @Override
+    public String toString() {
+        return "RegistryConfig{" +
+                "connectTimeout=" + connectTimeout +
+                ", address='" + address + '\'' +
+                ", env='" + env + '\'' +
+                '}';
+    }
 }
