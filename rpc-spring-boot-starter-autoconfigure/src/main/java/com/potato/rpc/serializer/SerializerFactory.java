@@ -1,6 +1,9 @@
 package com.potato.rpc.serializer;
 
 
+import com.potato.rpc.serializer.jdk.JDKSerializer;
+import com.potato.rpc.serializer.kryo.KryoSerializer;
+
 /**
  * 序列话工厂
  *
@@ -18,11 +21,16 @@ public enum SerializerFactory {
     public<T> T deserialize(byte[] bytes, Class<T> clazz) {
         return potatoSerializer.deserialize(bytes,clazz);
     }
-    public PotatoSerializer getPotatoSerialize() {
-        return potatoSerializer;
-    }
-
-    public void setPotatoSerialize(PotatoSerializer potatoSerializer) {
-        this.potatoSerializer = potatoSerializer;
+    public void setPotatoSerialize(String serializerType) {
+        switch(serializerType){
+            case "JDK" :
+                this.potatoSerializer = new JDKSerializer();
+                break;
+            case "KRYO" :
+                this.potatoSerializer = new KryoSerializer();
+                break;
+            default :
+                this.potatoSerializer = new JDKSerializer();
+        }
     }
 }

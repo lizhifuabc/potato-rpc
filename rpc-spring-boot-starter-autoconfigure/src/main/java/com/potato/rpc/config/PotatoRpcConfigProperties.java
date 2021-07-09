@@ -1,4 +1,4 @@
-package com.potato.rpc.properties;
+package com.potato.rpc.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -38,6 +38,10 @@ public class PotatoRpcConfigProperties {
      */
     private String protocol = "java";
     /**
+     * 序列化方式
+     */
+    private String serializerType = "JDK";
+    /**
      * 负载均衡算法
      */
     private String loadBalance = "random";
@@ -45,6 +49,14 @@ public class PotatoRpcConfigProperties {
      * 权重，默认为1
      */
     private Integer weight = 10;
+
+    public String getSerializerType() {
+        return serializerType;
+    }
+
+    public void setSerializerType(String serializerType) {
+        this.serializerType = serializerType;
+    }
 
     public Integer getWeight() {
         return weight;

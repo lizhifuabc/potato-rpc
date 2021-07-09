@@ -2,7 +2,7 @@ package com.potato.rpc.server;
 
 import com.potato.rpc.annotation.PotatoRpcClient;
 import com.potato.rpc.annotation.PotatoRpcServer;
-import com.potato.rpc.properties.PotatoRpcConfigProperties;
+import com.potato.rpc.config.PotatoRpcConfigProperties;
 import com.potato.rpc.transport.PotatoServer;
 import com.potato.rpc.proxy.ClientProxyFactory;
 import com.potato.rpc.register.ProviderInfo;
