@@ -33,6 +33,7 @@ public class KryoSerializer implements PotatoSerializer {
             Kryo kryo = kryoThreadLocal.get();
             //将对象序列化为byte数组
             kryo.writeObject(output, object);
+            //删除，防止内存溢出
             kryoThreadLocal.remove();
             return output.toBytes();
         }catch (Exception e){
@@ -48,6 +49,7 @@ public class KryoSerializer implements PotatoSerializer {
             Kryo kryo = kryoThreadLocal.get();
             //反序列化出对对象
             Object o = kryo.readObject(input, clazz);
+            //删除，防止内存溢出
             kryoThreadLocal.remove();
             return clazz.cast(o);
         }catch (Exception e){
