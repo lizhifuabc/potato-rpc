@@ -1,11 +1,9 @@
-package com.potato.rpc.protocol.netty.coder;
+package com.potato.rpc.transport.netty.coder;
 
 import com.potato.rpc.serializer.SerializerFactory;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-
-import java.io.ByteArrayOutputStream;
 
 /**
  * 编码、序列化

@@ -2,6 +2,7 @@ package com.potato.rpc.loadbalance.impl;
 
 import com.potato.rpc.loadbalance.LoadBalancer;
 import com.potato.rpc.common.model.ServerInfo;
+import com.potato.rpc.register.ProviderInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,23 +17,23 @@ import java.util.Random;
 public class RandomLoadBalance extends AbstractLoadBalancer {
     private static Random random = new Random();
     @Override
-    public ServerInfo doSelect(List<ServerInfo> list) {
+    public ProviderInfo doSelect(List<ProviderInfo> list) {
         return list.get(random.nextInt(list.size()));
     }
 
     public static void main(String[] args) {
-        List<ServerInfo> services = new ArrayList<>(3);
-        ServerInfo service = new ServerInfo();
+        List<ProviderInfo> services = new ArrayList<>(3);
+        ProviderInfo service = new ProviderInfo();
         service.setIp("196.128.6.1");
         service.setWeight(1);
         services.add(service);
 
-        ServerInfo service2 = new ServerInfo();
+        ProviderInfo service2 = new ProviderInfo();
         service2.setIp("196.128.6.2");
         service2.setWeight(3);
         services.add(service2);
 
-        ServerInfo service3 = new ServerInfo();
+        ProviderInfo service3 = new ProviderInfo();
         service3.setIp("196.128.6.3");
         service3.setWeight(5);
         services.add(service3);

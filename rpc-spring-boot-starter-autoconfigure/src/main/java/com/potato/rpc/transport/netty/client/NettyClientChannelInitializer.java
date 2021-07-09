@@ -1,7 +1,7 @@
-package com.potato.rpc.protocol.netty.client;
+package com.potato.rpc.transport.netty.client;
 
-import com.potato.rpc.protocol.netty.coder.NettyDecoder;
-import com.potato.rpc.protocol.netty.coder.NettyEncoder;
+import com.potato.rpc.transport.netty.coder.NettyDecoder;
+import com.potato.rpc.transport.netty.coder.NettyEncoder;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;

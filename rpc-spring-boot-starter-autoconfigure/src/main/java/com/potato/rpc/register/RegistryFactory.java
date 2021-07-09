@@ -1,5 +1,6 @@
 package com.potato.rpc.register;
 
+import com.potato.rpc.base.Destroyable;
 import com.potato.rpc.config.RegistryConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,18 +28,18 @@ public class RegistryFactory {
     /**
      * 保存全部的配置和注册中心实例
      */
-    private final static ConcurrentMap<RegistryConfig, ServiceRegistry> ALL_REGISTRIES = new ConcurrentHashMap<RegistryConfig, ServiceRegistry>();
+    private final static ConcurrentMap<RegistryConfig, Destroyable> ALL_REGISTRIES = new ConcurrentHashMap<RegistryConfig, Destroyable>();
 
-    public synchronized static void put(RegistryConfig registryConfig,ServiceRegistry serviceRegistry){
+    public synchronized static void put(RegistryConfig registryConfig,Destroyable serviceRegistry){
         ALL_REGISTRIES.put(registryConfig,serviceRegistry);
     }
     /**
      * 注册中心关闭
      */
     public static void destroy() {
-        for (Map.Entry<RegistryConfig, ServiceRegistry> entry : ALL_REGISTRIES.entrySet()) {
+        for (Map.Entry<RegistryConfig, Destroyable> entry : ALL_REGISTRIES.entrySet()) {
             RegistryConfig config = entry.getKey();
-            ServiceRegistry registry = entry.getValue();
+            Destroyable registry = entry.getValue();
             try {
                 logger.info("service destroy config:{}",config);
                 registry.destroy();

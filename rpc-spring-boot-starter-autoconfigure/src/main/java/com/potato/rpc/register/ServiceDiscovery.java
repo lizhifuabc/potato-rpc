@@ -5,16 +5,16 @@ import com.potato.rpc.base.Initializable;
 import com.potato.rpc.base.Startable;
 
 /**
- * 服务注册中心
+ * 服务发现
  *
  * @author lizhifu
  * @date 2021/7/8
  */
-public interface ServiceRegistry extends Destroyable, Initializable, Startable {
+public interface ServiceDiscovery extends Destroyable, Initializable, Startable {
     /**
-     * 服务注册
+     * 服务发现
      *
-     * @param providerInfo 服务注册信息
+     * @param serviceName 服务名称
      */
-    public void register(ProviderInfo providerInfo);
+    public void discovery(String serviceName);
 }

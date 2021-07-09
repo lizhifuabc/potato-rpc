@@ -1,22 +1,21 @@
 package com.potato.rpc.config;
 
-import com.potato.rpc.client.discovery.ServiceDiscovery;
-import com.potato.rpc.client.discovery.impl.zk.ZkServiceDiscovery;
-import com.potato.rpc.client.discovery.impl.zk.ZkServerDiscoveryConfig;
 import com.potato.rpc.loadbalance.LoadBalancer;
 import com.potato.rpc.loadbalance.impl.RandomLoadBalance;
 import com.potato.rpc.properties.PotatoRpcConfigProperties;
-import com.potato.rpc.protocol.PotatoClient;
-import com.potato.rpc.protocol.netty.client.NettyClient;
+import com.potato.rpc.transport.PotatoClient;
+import com.potato.rpc.transport.netty.client.NettyClient;
 import com.potato.rpc.proxy.ClientProxyFactory;
 import com.potato.rpc.register.RegistryFactory;
+import com.potato.rpc.register.ServiceDiscovery;
 import com.potato.rpc.register.ServiceRegistry;
+import com.potato.rpc.register.zk.ZkServiceDiscovery;
 import com.potato.rpc.register.zk.ZookeeperRegistry;
 import com.potato.rpc.serializer.SerializerFactory;
 import com.potato.rpc.serializer.jdk.JDKSerializer;
-import com.potato.rpc.protocol.PotatoServer;
+import com.potato.rpc.transport.PotatoServer;
 import com.potato.rpc.server.PotatoServerPublisher;
-import com.potato.rpc.protocol.netty.server.NettyServer;
+import com.potato.rpc.transport.netty.server.NettyServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -59,15 +58,15 @@ public class PotatoRpcAutoConfiguration {
     }
     @Bean
     public ServiceDiscovery serviceDiscovery() {
-        ZkServerDiscoveryConfig zkServerRegisterConfig = new ZkServerDiscoveryConfig();
-        zkServerRegisterConfig.setZkAddress(potatoRpcConfigProperties.getRegisterAddress());
-        zkServerRegisterConfig.setWeight(potatoRpcConfigProperties.getWeight());
-        zkServerRegisterConfig.setEnv(potatoRpcConfigProperties.getEnv());
-        zkServerRegisterConfig.setPort(potatoRpcConfigProperties.getPort());
-        zkServerRegisterConfig.setServer(potatoRpcConfigProperties.getServer());
-        ZkServiceDiscovery zkServiceDiscovery = new ZkServiceDiscovery(zkServerRegisterConfig);
-        zkServiceDiscovery.init();
-        return zkServiceDiscovery;
+        RegistryConfig registryConfig = new RegistryConfig();
+        registryConfig.setEnv(potatoRpcConfigProperties.getEnv());
+        registryConfig.setAddress(potatoRpcConfigProperties.getRegisterAddress());
+        registryConfig.setConnectTimeout(potatoRpcConfigProperties.getConnectTimeout());
+        ServiceDiscovery serviceDiscovery = new ZkServiceDiscovery(registryConfig);
+        serviceDiscovery.init();
+        serviceDiscovery.start();
+        RegistryFactory.put(registryConfig,serviceDiscovery);
+        return serviceDiscovery;
     }
     @Bean
     public PotatoServerPublisher serverPublisher(@Autowired PotatoServer potatoServer,

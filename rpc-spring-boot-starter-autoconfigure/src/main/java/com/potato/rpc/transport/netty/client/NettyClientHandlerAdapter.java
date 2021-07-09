@@ -1,10 +1,10 @@
-package com.potato.rpc.protocol.netty.client;
+package com.potato.rpc.transport.netty.client;
 
 import com.potato.rpc.common.constants.RequestMessageType;
 import com.potato.rpc.common.constants.ResponseMessageType;
 import com.potato.rpc.common.model.RpcMessage;
 import com.potato.rpc.common.model.RpcResponse;
-import com.potato.rpc.protocol.netty.CompletableFutureHelper;
+import com.potato.rpc.transport.netty.CompletableFutureHelper;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

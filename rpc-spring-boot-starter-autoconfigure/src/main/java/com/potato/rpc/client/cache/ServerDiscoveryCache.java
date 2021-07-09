@@ -1,6 +1,7 @@
 package com.potato.rpc.client.cache;
 
 import com.potato.rpc.common.model.ServerInfo;
+import com.potato.rpc.register.ProviderInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -16,5 +17,5 @@ public class ServerDiscoveryCache {
     /**
      * key: serviceName
      */
-    public static final Map<String, List<ServerInfo>> SERVER_MAP = new ConcurrentHashMap<>();
+    public static final Map<String, List<ProviderInfo>> SERVER_MAP = new ConcurrentHashMap<>();
 }

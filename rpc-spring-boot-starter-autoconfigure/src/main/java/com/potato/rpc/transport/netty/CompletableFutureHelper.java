@@ -1,4 +1,4 @@
-package com.potato.rpc.protocol.netty;
+package com.potato.rpc.transport.netty;
 
 import com.potato.rpc.common.model.RpcResponse;
 
@@ -25,7 +25,7 @@ public enum CompletableFutureHelper {
 
     public void complete(RpcResponse rpcResponse){
         CompletableFuture<RpcResponse> future = map.get(rpcResponse.getRequestId());
-        //事件结束， 返回值设置为rpcResponse
+        //事件结束，返回值设置为rpcResponse
         future.complete(rpcResponse);
         map.remove(rpcResponse.getRequestId());
     }

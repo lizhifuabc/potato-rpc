@@ -2,6 +2,7 @@ package com.potato.rpc.loadbalance.impl;
 
 import com.potato.rpc.loadbalance.LoadBalancer;
 import com.potato.rpc.common.model.ServerInfo;
+import com.potato.rpc.register.ProviderInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +26,21 @@ public abstract class AbstractLoadBalancer implements LoadBalancer {
         return -1;
     }
     @Override
-    public ServerInfo select(List<ServerInfo> list) {
+    public ProviderInfo select(List<ProviderInfo> list) {
         if(list == null){
             return null;
         }
         if(list.size() == 1){
             return list.get(0);
         }
-        List<ServerInfo> serverInfoList = new ArrayList<>();
+        List<ProviderInfo> providerInfoList = new ArrayList<>();
         for (int i = list.size()-1; i >=0 ; i--) {
-            ServerInfo ServerInfo = list.get(i);
-            if(ServerInfo.isEnable()){
-                serverInfoList.add(ServerInfo);
+            ProviderInfo providerInfo = list.get(i);
+            if(providerInfo.getEnable() == 1){
+                providerInfoList.add(providerInfo);
             }
         }
-        return doSelect(serverInfoList);
+        return doSelect(providerInfoList);
     }
 
     /**
@@ -47,5 +48,5 @@ public abstract class AbstractLoadBalancer implements LoadBalancer {
      * @param list 可用接口信息
      * @return 接口信息
      */
-    public abstract ServerInfo doSelect(List<ServerInfo> list);
+    public abstract ProviderInfo doSelect(List<ProviderInfo> list);
 }

@@ -1,6 +1,5 @@
-package com.potato.rpc.protocol.netty.server;
+package com.potato.rpc.transport.netty.server;
 
-import com.potato.rpc.client.cache.ServerDiscoveryCache;
 import com.potato.rpc.common.constants.RequestMessageType;
 import com.potato.rpc.common.constants.ResponseMessageType;
 import com.potato.rpc.common.model.RpcMessage;

@@ -1,6 +1,6 @@
-package com.potato.rpc.protocol.netty.server;
+package com.potato.rpc.transport.netty.server;
 
-import com.potato.rpc.protocol.PotatoServer;
+import com.potato.rpc.transport.PotatoServer;
 import com.potato.rpc.server.ServerPublisherConfig;
 import com.potato.rpc.util.SysUtil;
 import com.potato.rpc.util.ThreadPoolFactoryUtil;

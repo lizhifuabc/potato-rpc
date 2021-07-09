@@ -1,11 +1,11 @@
-package com.potato.rpc.protocol.netty.client;
+package com.potato.rpc.transport.netty.client;
 
 import com.potato.rpc.common.model.RpcMessage;
 import com.potato.rpc.common.model.RpcRequest;
 import com.potato.rpc.common.model.RpcResponse;
-import com.potato.rpc.common.model.ServerInfo;
-import com.potato.rpc.protocol.PotatoClient;
-import com.potato.rpc.protocol.netty.CompletableFutureHelper;
+import com.potato.rpc.transport.PotatoClient;
+import com.potato.rpc.transport.netty.CompletableFutureHelper;
+import com.potato.rpc.register.ProviderInfo;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -44,11 +44,11 @@ public class NettyClient implements PotatoClient {
                 .handler(new NettyClientChannelInitializer());
     }
     @Override
-    public CompletableFuture<RpcResponse> request(RpcMessage rpcMessage, ServerInfo serviceInfo) {
+    public CompletableFuture<RpcResponse> request(RpcMessage rpcMessage, ProviderInfo providerInfo) {
         RpcRequest rpcRequest = (RpcRequest) rpcMessage.getData();
         CompletableFuture<RpcResponse> rpcFuture = new CompletableFuture<>();
         CompletableFutureHelper.INSTANCE.put(rpcRequest.getRequestId(),rpcFuture);
-        String ipPort = serviceInfo.getIp()+":"+serviceInfo.getPort();
+        String ipPort = providerInfo.getIp()+":"+providerInfo.getPort();
         Channel channel = getChannel(ipPort);
         if (channel.isActive()) {
             channel.writeAndFlush(rpcMessage).addListener((ChannelFutureListener) future -> {

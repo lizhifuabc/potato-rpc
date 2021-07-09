@@ -1,4 +1,4 @@
-package com.potato.rpc.protocol.netty.client;
+package com.potato.rpc.transport.netty.client;
 
 import io.netty.channel.Channel;
 

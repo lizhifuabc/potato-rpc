@@ -2,13 +2,11 @@ package com.potato.rpc.server;
 
 import com.potato.rpc.annotation.PotatoRpcClient;
 import com.potato.rpc.annotation.PotatoRpcServer;
-import com.potato.rpc.client.discovery.ServiceDiscovery;
-import com.potato.rpc.common.model.ServerInfo;
-import com.potato.rpc.common.model.ServiceObject;
 import com.potato.rpc.properties.PotatoRpcConfigProperties;
-import com.potato.rpc.protocol.PotatoServer;
+import com.potato.rpc.transport.PotatoServer;
 import com.potato.rpc.proxy.ClientProxyFactory;
 import com.potato.rpc.register.ProviderInfo;
+import com.potato.rpc.register.ServiceDiscovery;
 import com.potato.rpc.register.ServiceRegistry;
 import com.potato.rpc.util.IPUtil;
 import org.slf4j.Logger;
@@ -82,15 +80,11 @@ public class PotatoServerPublisher implements ApplicationListener<ContextRefresh
                 Class<?> fieldClass = field.getType();
                 Object object = context.getBean(name);
                 field.setAccessible(true);
-                try {
-                    field.set(object,clientProxyFactory.getProxyInstance(fieldClass));
-                    serviceList.add(fieldClass.getName());
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+                field.set(object,clientProxyFactory.getProxyInstance(fieldClass));
+                serviceList.add(fieldClass.getName());
+                serviceDiscovery.discovery(fieldClass.getName());
             }
         }
-        serviceDiscovery.discovery(serviceList);
     }
     /**
      * 启动服务

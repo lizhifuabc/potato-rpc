@@ -44,7 +44,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
     @Override
     public synchronized boolean start() {
         if (zkClient == null) {
-            throw new PotatoRuntimeException("zk not init");
+            throw new PotatoRuntimeException("ZookeeperRegistry not init");
         }
         if (zkClient.getState() == CuratorFrameworkState.STARTED) {
             return true;
@@ -52,7 +52,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
         try {
             zkClient.start();
         } catch (Exception e) {
-            throw new PotatoRuntimeException("zk start exception", e);
+            throw new PotatoRuntimeException("ZookeeperRegistry start exception", e);
         }
         return zkClient.getState() == CuratorFrameworkState.STARTED;
     }
@@ -75,7 +75,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
                 zkClient().create().withMode(CreateMode.EPHEMERAL).forPath(childPath,providerInfo.json().getBytes(StandardCharsets.UTF_8));
             }
         }catch (Exception e){
-            throw new PotatoRuntimeException("zk registry exception", e);
+            throw new PotatoRuntimeException("ZookeeperRegistry registry exception", e);
         }
     }
 
@@ -119,14 +119,14 @@ public class ZookeeperRegistry extends AbstractRegistry {
             }
         });
     }
-    protected void recoverRegistryData() {
+    private void recoverRegistryData() {
         for (String serviceName : providerInfoMap.keySet()) {
             register(providerInfoMap.get(serviceName));
         }
     }
     private CuratorFramework zkClient() {
         if (zkClient == null || zkClient.getState() != CuratorFrameworkState.STARTED) {
-            throw new PotatoRuntimeException("zkClient check exception");
+            throw new PotatoRuntimeException("ZookeeperRegistry zkClient check exception");
         }
         return zkClient;
     }

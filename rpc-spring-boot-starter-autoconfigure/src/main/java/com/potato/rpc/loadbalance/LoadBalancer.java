@@ -1,6 +1,7 @@
 package com.potato.rpc.loadbalance;
 
 import com.potato.rpc.common.model.ServerInfo;
+import com.potato.rpc.register.ProviderInfo;
 
 import java.util.List;
 
@@ -16,5 +17,5 @@ public interface LoadBalancer {
      * @param list
      * @return 接口信息
      */
-    ServerInfo select(List<ServerInfo> list);
+    ProviderInfo select(List<ProviderInfo> list);
 }

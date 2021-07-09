@@ -1,9 +1,8 @@
-package com.potato.rpc.protocol;
+package com.potato.rpc.transport;
 
 import com.potato.rpc.common.model.RpcMessage;
-import com.potato.rpc.common.model.RpcRequest;
 import com.potato.rpc.common.model.RpcResponse;
-import com.potato.rpc.common.model.ServerInfo;
+import com.potato.rpc.register.ProviderInfo;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -19,5 +18,5 @@ public interface PotatoClient {
      * @param rpcMessage
      * @return
      */
-    CompletableFuture<RpcResponse> request(RpcMessage rpcMessage, ServerInfo serviceInfo);
+    CompletableFuture<RpcResponse> request(RpcMessage rpcMessage, ProviderInfo serviceInfo);
 }

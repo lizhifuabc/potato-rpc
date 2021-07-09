@@ -1,4 +1,4 @@
-package com.potato.rpc.protocol.netty.coder;
+package com.potato.rpc.transport.netty.coder;
 
 import com.potato.rpc.common.model.RpcResponse;
 import com.potato.rpc.serializer.SerializerFactory;

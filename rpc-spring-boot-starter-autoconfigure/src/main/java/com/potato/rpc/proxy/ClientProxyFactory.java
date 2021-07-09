@@ -1,14 +1,13 @@
 package com.potato.rpc.proxy;
 
 import com.potato.rpc.client.cache.ServerDiscoveryCache;
-import com.potato.rpc.client.discovery.ServiceDiscovery;
 import com.potato.rpc.common.constants.RequestMessageType;
 import com.potato.rpc.common.model.RpcMessage;
 import com.potato.rpc.common.model.RpcRequest;
 import com.potato.rpc.common.model.RpcResponse;
-import com.potato.rpc.common.model.ServerInfo;
 import com.potato.rpc.loadbalance.LoadBalancer;
-import com.potato.rpc.protocol.PotatoClient;
+import com.potato.rpc.transport.PotatoClient;
+import com.potato.rpc.register.ProviderInfo;
 import com.potato.rpc.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,9 +72,9 @@ public class ClientProxyFactory{
             logger.info("method: {}", method);
             // 1.获得服务信息
             String serviceName = clazz.getName();
-            List<ServerInfo> list = ServerDiscoveryCache.SERVER_MAP.get(serviceName);
-            ServerInfo serviceInfo = loadBalancer.select(list);
-            logger.info("get serviceName {} serviceInfo {}",serviceName,serviceInfo);
+            List<ProviderInfo> list = ServerDiscoveryCache.SERVER_MAP.get(serviceName);
+            ProviderInfo providerInfo = loadBalancer.select(list);
+            logger.info("get serviceName {} providerInfo {}",serviceName,providerInfo);
             RpcRequest rpcRequest = new RpcRequest();
             rpcRequest.setRequestId(RandomUtil.uuid());
             rpcRequest.setMethod(method.getName());
@@ -85,7 +84,7 @@ public class ClientProxyFactory{
             RpcMessage rpcMessage = new RpcMessage();
             rpcMessage.setData(rpcRequest);
             rpcMessage.setMessageType(RequestMessageType.REQUEST_TYPE_NORMAL);
-            CompletableFuture<RpcResponse> completableFuture = potatoClient.request(rpcMessage,serviceInfo);
+            CompletableFuture<RpcResponse> completableFuture = potatoClient.request(rpcMessage,providerInfo);
             return completableFuture.get().getReturnValue();
         }
     }
