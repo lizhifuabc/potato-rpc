@@ -1,10 +1,7 @@
 package com.potato.rpc.transport.netty.client;
 
 import com.potato.rpc.transport.model.RpcMessage;
-import com.potato.rpc.transport.model.RpcRequest;
-import com.potato.rpc.transport.model.RpcResponse;
 import com.potato.rpc.transport.PotatoClient;
-import com.potato.rpc.transport.netty.CompletableFutureHelper;
 import com.potato.rpc.register.ProviderInfo;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -32,6 +29,7 @@ public class NettyClient implements PotatoClient {
 
     /**
      * 初始化
+     * TODO socks5
      */
     public NettyClient() {
         eventLoopGroup = new NioEventLoopGroup();
@@ -39,8 +37,8 @@ public class NettyClient implements PotatoClient {
         bootstrap.group(eventLoopGroup)
                 .channel(NioSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
-                //连接超时时间
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
+                //连接超时时间:3s
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000)
                 .handler(new NettyClientChannelInitializer());
     }
     @Override
@@ -74,6 +72,7 @@ public class NettyClient implements PotatoClient {
         String host = socketAddressArray[0];
         int port = Integer.parseInt(socketAddressArray[1]);
         InetSocketAddress inetSocketAddress = new InetSocketAddress(host,port);
+        //建立与服务端的连接
         bootstrap.connect(inetSocketAddress).addListener((ChannelFutureListener) future -> {
             if (future.isSuccess()) {
                 logger.info("The client has connected [{}] successful!", inetSocketAddress.toString());

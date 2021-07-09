@@ -1,4 +1,4 @@
-package com.potato.rpc.transport.netty;
+package com.potato.rpc.transport.netty.client;
 
 import com.potato.rpc.transport.model.RpcMessage;
 import com.potato.rpc.transport.model.RpcResponse;

@@ -59,7 +59,9 @@ public class NettyServer implements PotatoServer {
                     .handler(new LoggingHandler(LogLevel.INFO))
                     // 当客户端第一次进行请求的时候才会进行初始化
                     .childHandler(new NettyServerChannelInitializer(serviceHandlerGroup,serviceRegistry))
-                    //表示系统用于临时存放已完成三次握手的请求的队列的最大长度,如果连接建立频繁，服务器处理创建新连接较慢，可以适当调大这个参数
+                    // 临时存放已完成三次握手的请求的队列的最大长度，如果连接建立频繁，服务器处理创建新连接较慢，可以适当调大这个参数
+                    // 如果未设置或所设置的值小于1，Java将使用默认值50。
+                    // 如果大于队列的最大长度，请求会被拒绝
                     .option(ChannelOption.SO_BACKLOG, 1024)
                     .option(ChannelOption.SO_REUSEADDR, true)
                     // 是否开启 TCP 底层心跳机制
