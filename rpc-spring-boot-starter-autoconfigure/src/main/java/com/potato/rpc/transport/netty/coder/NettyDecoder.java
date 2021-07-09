@@ -1,6 +1,6 @@
 package com.potato.rpc.transport.netty.coder;
 
-import com.potato.rpc.transport.model.RpcResponse;
+import com.potato.rpc.transport.model.RpcMessage;
 import com.potato.rpc.serializer.SerializerFactory;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -37,7 +37,7 @@ public class NettyDecoder extends ByteToMessageDecoder {
         in.readBytes(data);
         Object obj = null;
         try {
-            obj = SerializerFactory.INSTANCE.deserialize(data, RpcResponse.class);
+            obj = SerializerFactory.INSTANCE.deserialize(data, RpcMessage.class);
             out.add(obj);
         } catch (Exception ex) {
             logger.error("decode error: " + ex.toString());

@@ -6,7 +6,7 @@ package com.potato.rpc.serializer;
  * @author lizhifu
  * @date 2021/7/2
  */
-public interface PotatoSerialize {
+public interface PotatoSerializer {
     /**
      * 序列化（对象 -> 字节数组）
      *

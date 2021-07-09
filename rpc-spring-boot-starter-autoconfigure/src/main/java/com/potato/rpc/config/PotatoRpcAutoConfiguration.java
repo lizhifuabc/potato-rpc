@@ -3,6 +3,7 @@ package com.potato.rpc.config;
 import com.potato.rpc.loadbalance.LoadBalancer;
 import com.potato.rpc.loadbalance.impl.RandomLoadBalance;
 import com.potato.rpc.properties.PotatoRpcConfigProperties;
+import com.potato.rpc.serializer.kryo.KryoSerializer;
 import com.potato.rpc.transport.PotatoClient;
 import com.potato.rpc.transport.netty.client.NettyClient;
 import com.potato.rpc.proxy.ClientProxyFactory;
@@ -75,7 +76,7 @@ public class PotatoRpcAutoConfiguration {
                                                  @Autowired PotatoRpcConfigProperties potatoRpcConfigProperties,
                                                  @Autowired ClientProxyFactory clientProxyFactory) {
         //设置序列化方式
-        SerializerFactory.INSTANCE.setPotatoSerialize(new JDKSerializer());
+        SerializerFactory.INSTANCE.setPotatoSerialize(new KryoSerializer());
         return new PotatoServerPublisher(clientProxyFactory,potatoServer, serviceRegistry,serviceDiscovery,potatoRpcConfigProperties);
     }
 }

@@ -1,7 +1,7 @@
 package com.potato.rpc.serializer.jdk;
 
-import com.potato.rpc.serializer.PotatoSerialize;
-import com.potato.rpc.serializer.exception.SerializerException;
+import com.potato.rpc.common.exception.PotatoRuntimeException;
+import com.potato.rpc.serializer.PotatoSerializer;
 import org.apache.commons.lang.ArrayUtils;
 
 import java.io.ByteArrayInputStream;
@@ -15,11 +15,11 @@ import java.io.ObjectOutputStream;
  * @author lizhifu
  * @date 2021/7/2
  */
-public class JDKSerializer implements PotatoSerialize {
+public class JDKSerializer implements PotatoSerializer {
     @Override
     public byte[] serialize(Object object) {
         if (object == null) {
-            throw new SerializerException("Object is null");
+            throw new PotatoRuntimeException("Object is null");
         }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -30,7 +30,7 @@ public class JDKSerializer implements PotatoSerialize {
             oos.writeObject(object);
             bytes = baos.toByteArray();
         } catch (Exception e) {
-            throw new SerializerException(e.getMessage(), e);
+            throw new PotatoRuntimeException(e.getMessage(), e);
         } finally {
             try {
                 if (oos != null) {
@@ -58,7 +58,7 @@ public class JDKSerializer implements PotatoSerialize {
     @Override
     public <T> T deserialize(byte[] bytes, Class<T> clazz) {
         if (ArrayUtils.isEmpty(bytes)) {
-            throw new SerializerException("Bytes is null or empty");
+            throw new PotatoRuntimeException("Bytes is null or empty");
         }
 
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
@@ -68,7 +68,7 @@ public class JDKSerializer implements PotatoSerialize {
             ois = new ObjectInputStream(bais);
             object = ois.readObject();
         } catch (Exception e) {
-            throw new SerializerException(e.getMessage(), e);
+            throw new PotatoRuntimeException(e.getMessage(), e);
         } finally {
             try {
                 if (ois != null) {
