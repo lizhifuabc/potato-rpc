@@ -1,4 +1,4 @@
-package com.potato.rpc.common.constants;
+package com.potato.rpc.transport.model;
 
 /**
  * 请求消息类型

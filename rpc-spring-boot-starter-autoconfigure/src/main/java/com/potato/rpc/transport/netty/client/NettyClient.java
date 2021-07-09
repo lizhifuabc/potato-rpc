@@ -1,8 +1,8 @@
 package com.potato.rpc.transport.netty.client;
 
-import com.potato.rpc.common.model.RpcMessage;
-import com.potato.rpc.common.model.RpcRequest;
-import com.potato.rpc.common.model.RpcResponse;
+import com.potato.rpc.transport.model.RpcMessage;
+import com.potato.rpc.transport.model.RpcRequest;
+import com.potato.rpc.transport.model.RpcResponse;
 import com.potato.rpc.transport.PotatoClient;
 import com.potato.rpc.transport.netty.CompletableFutureHelper;
 import com.potato.rpc.register.ProviderInfo;
@@ -44,20 +44,20 @@ public class NettyClient implements PotatoClient {
                 .handler(new NettyClientChannelInitializer());
     }
     @Override
-    public CompletableFuture<RpcResponse> request(RpcMessage rpcMessage, ProviderInfo providerInfo) {
-        RpcRequest rpcRequest = (RpcRequest) rpcMessage.getData();
-        CompletableFuture<RpcResponse> rpcFuture = new CompletableFuture<>();
-        CompletableFutureHelper.INSTANCE.put(rpcRequest.getRequestId(),rpcFuture);
+    public CompletableFuture<RpcMessage> request(RpcMessage rpcMessage, ProviderInfo providerInfo) {
+        CompletableFuture<RpcMessage> rpcFuture = new CompletableFuture<>();
+        CompletableFutureHelper.INSTANCE.put(rpcMessage.getRequestId(),rpcFuture);
+
         String ipPort = providerInfo.getIp()+":"+providerInfo.getPort();
         Channel channel = getChannel(ipPort);
         if (channel.isActive()) {
             channel.writeAndFlush(rpcMessage).addListener((ChannelFutureListener) future -> {
                 if (future.isSuccess()) {
-                    logger.info("client send rpcRequest:{}", rpcRequest);
+                    logger.info("client send rpcRequest:{}", rpcMessage);
                 } else {
                     future.channel().close();
                     logger.error("client send failed:", future.cause());
-                    CompletableFutureHelper.INSTANCE.remove(rpcRequest.getRequestId());
+                    CompletableFutureHelper.INSTANCE.remove(rpcMessage.getRequestId());
                     //这里直接抛异常
                     rpcFuture.completeExceptionally(future.cause());
                 }

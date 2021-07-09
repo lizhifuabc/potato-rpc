@@ -1,10 +1,10 @@
 package com.potato.rpc.transport.netty.server;
 
-import com.potato.rpc.common.constants.RequestMessageType;
-import com.potato.rpc.common.constants.ResponseMessageType;
-import com.potato.rpc.common.model.RpcMessage;
-import com.potato.rpc.common.model.RpcRequest;
-import com.potato.rpc.common.model.RpcResponse;
+import com.potato.rpc.transport.model.RequestMessageType;
+import com.potato.rpc.transport.model.ResponseMessageType;
+import com.potato.rpc.transport.model.RpcMessage;
+import com.potato.rpc.transport.model.RpcRequest;
+import com.potato.rpc.transport.model.RpcResponse;
 import com.potato.rpc.common.model.ServiceObject;
 import com.potato.rpc.server.cache.ServerRegistryCache;
 import io.netty.channel.ChannelFutureListener;
@@ -43,7 +43,6 @@ public class NettyServerHandlerAdapter extends ChannelInboundHandlerAdapter {
                         method = serviceObject.getObj().getClass().getMethod(rpcRequest.getMethod(), rpcRequest.getParameterTypes());
                         Object returnValue = method.invoke(serviceObject.getObj(), rpcRequest.getParameters());
                         RpcResponse response = new RpcResponse();
-                        response.setRequestId(rpcRequest.getRequestId());
                         response.setReturnValue(returnValue);
                         rpcMessage.setMessageType(ResponseMessageType.RESPONSE_TYPE_NORMAL);
                         rpcMessage.setData(response);

@@ -1,4 +1,4 @@
-package com.potato.rpc.common.model;
+package com.potato.rpc.transport.model;
 
 import com.potato.rpc.common.constants.PotatoRpcStatusEnum;
 
@@ -13,7 +13,6 @@ import java.util.Map;
  * @date 2021/7/1
  */
 public class RpcResponse implements Serializable {
-    private String requestId;
 
     private Map<String, String> headers = new HashMap<>();
 
@@ -22,14 +21,6 @@ public class RpcResponse implements Serializable {
     private Exception exception;
 
     private PotatoRpcStatusEnum potatoRpcStatusEnum;
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
 
     public Map<String, String> getHeaders() {
         return headers;
@@ -65,9 +56,8 @@ public class RpcResponse implements Serializable {
 
     @Override
     public String toString() {
-        return "PotatoRpcResponse{" +
-                "requestId='" + requestId + '\'' +
-                ", headers=" + headers +
+        return "RpcResponse{" +
+                "headers=" + headers +
                 ", returnValue=" + returnValue +
                 ", exception=" + exception +
                 ", potatoRpcStatusEnum=" + potatoRpcStatusEnum +

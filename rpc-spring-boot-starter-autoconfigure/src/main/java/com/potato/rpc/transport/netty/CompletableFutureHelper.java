@@ -1,6 +1,7 @@
 package com.potato.rpc.transport.netty;
 
-import com.potato.rpc.common.model.RpcResponse;
+import com.potato.rpc.transport.model.RpcMessage;
+import com.potato.rpc.transport.model.RpcResponse;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -14,8 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public enum CompletableFutureHelper {
     INSTANCE;
-    private static Map<String, CompletableFuture<RpcResponse>> map = new ConcurrentHashMap<>();
-    public void put(String requestId, CompletableFuture<RpcResponse> future){
+    private static Map<String, CompletableFuture<RpcMessage>> map = new ConcurrentHashMap<>();
+    public void put(String requestId, CompletableFuture<RpcMessage> future){
         map.put(requestId,future);
     }
 
@@ -23,11 +24,11 @@ public enum CompletableFutureHelper {
         map.remove(requestId);
     }
 
-    public void complete(RpcResponse rpcResponse){
-        CompletableFuture<RpcResponse> future = map.get(rpcResponse.getRequestId());
+    public void complete(RpcMessage rpcMessage){
+        CompletableFuture<RpcMessage> future = map.get(rpcMessage.getRequestId());
         //事件结束，返回值设置为rpcResponse
-        future.complete(rpcResponse);
-        map.remove(rpcResponse.getRequestId());
+        future.complete(rpcMessage);
+        map.remove(rpcMessage.getRequestId());
     }
 
 }

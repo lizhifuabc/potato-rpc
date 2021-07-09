@@ -1,6 +1,6 @@
 package com.potato.rpc.transport.netty.coder;
 
-import com.potato.rpc.common.model.RpcResponse;
+import com.potato.rpc.transport.model.RpcResponse;
 import com.potato.rpc.serializer.SerializerFactory;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

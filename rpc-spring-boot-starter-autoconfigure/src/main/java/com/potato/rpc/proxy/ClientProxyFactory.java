@@ -1,10 +1,10 @@
 package com.potato.rpc.proxy;
 
 import com.potato.rpc.client.cache.ServerDiscoveryCache;
-import com.potato.rpc.common.constants.RequestMessageType;
-import com.potato.rpc.common.model.RpcMessage;
-import com.potato.rpc.common.model.RpcRequest;
-import com.potato.rpc.common.model.RpcResponse;
+import com.potato.rpc.transport.model.RequestMessageType;
+import com.potato.rpc.transport.model.RpcMessage;
+import com.potato.rpc.transport.model.RpcRequest;
+import com.potato.rpc.transport.model.RpcResponse;
 import com.potato.rpc.loadbalance.LoadBalancer;
 import com.potato.rpc.transport.PotatoClient;
 import com.potato.rpc.register.ProviderInfo;
@@ -76,16 +76,19 @@ public class ClientProxyFactory{
             ProviderInfo providerInfo = loadBalancer.select(list);
             logger.info("get serviceName {} providerInfo {}",serviceName,providerInfo);
             RpcRequest rpcRequest = new RpcRequest();
-            rpcRequest.setRequestId(RandomUtil.uuid());
             rpcRequest.setMethod(method.getName());
             rpcRequest.setServiceName(serviceName);
             rpcRequest.setParameters(args);
             rpcRequest.setParameterTypes(method.getParameterTypes());
+
             RpcMessage rpcMessage = new RpcMessage();
             rpcMessage.setData(rpcRequest);
+            rpcMessage.setRequestId(RandomUtil.uuid());
             rpcMessage.setMessageType(RequestMessageType.REQUEST_TYPE_NORMAL);
-            CompletableFuture<RpcResponse> completableFuture = potatoClient.request(rpcMessage,providerInfo);
-            return completableFuture.get().getReturnValue();
+
+            CompletableFuture<RpcMessage> completableFuture = potatoClient.request(rpcMessage,providerInfo);
+            RpcResponse rpcResponse = (RpcResponse) completableFuture.get().getData();
+            return rpcResponse.getReturnValue();
         }
     }
 }

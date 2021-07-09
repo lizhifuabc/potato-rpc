@@ -1,4 +1,4 @@
-package com.potato.rpc.common.model;
+package com.potato.rpc.transport.model;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -13,10 +13,6 @@ import java.util.Map;
  */
 public class RpcRequest implements Serializable {
     /**
-     * 请求ID
-     */
-    private String requestId;
-    /**
      * 请求的服务名
      */
     private String serviceName;
@@ -30,14 +26,6 @@ public class RpcRequest implements Serializable {
     private Class<?>[] parameterTypes;
 
     private Object[] parameters;
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
 
     public String getServiceName() {
         return serviceName;
@@ -81,9 +69,8 @@ public class RpcRequest implements Serializable {
 
     @Override
     public String toString() {
-        return "PotatoRpcRequest{" +
-                "requestId='" + requestId + '\'' +
-                ", serviceName='" + serviceName + '\'' +
+        return "RpcRequest{" +
+                "serviceName='" + serviceName + '\'' +
                 ", method='" + method + '\'' +
                 ", headers=" + headers +
                 ", parameterTypes=" + Arrays.toString(parameterTypes) +
