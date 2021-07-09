@@ -23,6 +23,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 服务发现
@@ -31,6 +33,10 @@ import java.util.List;
  * @date 2021/7/8
  */
 public class ZkServiceDiscovery extends AbstractDiscovery {
+    /**
+     * key: serviceName
+     */
+    private Map<String, List<ProviderInfo>> SERVER_MAP = new ConcurrentHashMap<>();
     private final static Logger logger = LoggerFactory.getLogger(ZkServiceDiscovery.class);
     /**
      * ZooKeeper client
@@ -80,7 +86,7 @@ public class ZkServiceDiscovery extends AbstractDiscovery {
         });
     }
     private void recoverDiscoveryData() {
-        for (String serviceName : ServerDiscoveryCache.SERVER_MAP.keySet()) {
+        for (String serviceName : SERVER_MAP.keySet()) {
             discovery(serviceName);
         }
     }
@@ -144,6 +150,12 @@ public class ZkServiceDiscovery extends AbstractDiscovery {
             throw new PotatoRuntimeException("ZkServiceDiscovery discovery exception", e);
         }
     }
+
+    @Override
+    public List<ProviderInfo> getProviderInfo(String serviceName) {
+        return SERVER_MAP.get(serviceName);
+    }
+
     private void updateProviderInfo(ChildData childData, String serviceName) {
         try {
             String data = new String(childData.getData(), "UTF-8");
@@ -165,7 +177,7 @@ public class ZkServiceDiscovery extends AbstractDiscovery {
             providerInfo.setEnable(enable);
             providerInfo.setPort(port);
             logger.info("ZkServerDiscovery updateProviderInfo providerInfo:{}", providerInfo);
-            List<ProviderInfo> providerInfoList = ServerDiscoveryCache.SERVER_MAP.get(serviceName);
+            List<ProviderInfo> providerInfoList = SERVER_MAP.get(serviceName);
             if(providerInfoList != null){
                 for(int i = 0; i < providerInfoList.size(); i++) {
                     ProviderInfo _providerInfo = providerInfoList.get(i);
@@ -186,7 +198,7 @@ public class ZkServiceDiscovery extends AbstractDiscovery {
      */
     private void updateProviderInfoList(List<String> childPathList, String parentPath, String serviceName) {
         try {
-            ServerDiscoveryCache.SERVER_MAP.remove(serviceName);
+            SERVER_MAP.remove(serviceName);
             List<ProviderInfo> providerInfoList = new ArrayList<>();
             for(String _childPath : childPathList) {
                 // /env/com.test.service/192.168.1.10:6666
@@ -210,7 +222,7 @@ public class ZkServiceDiscovery extends AbstractDiscovery {
                 providerInfo.setPort(port);
                 providerInfoList.add(providerInfo);
             }
-            ServerDiscoveryCache.SERVER_MAP.put(serviceName,providerInfoList);
+            SERVER_MAP.put(serviceName,providerInfoList);
         }catch (Exception e){
             throw new PotatoRuntimeException("ZkServiceDiscovery discovery updateProviderInfoList exception", e);
         }

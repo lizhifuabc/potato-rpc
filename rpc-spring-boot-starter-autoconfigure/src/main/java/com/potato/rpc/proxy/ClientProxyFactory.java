@@ -1,6 +1,7 @@
 package com.potato.rpc.proxy;
 
 import com.potato.rpc.client.cache.ServerDiscoveryCache;
+import com.potato.rpc.register.ServiceDiscovery;
 import com.potato.rpc.transport.model.RequestMessageType;
 import com.potato.rpc.transport.model.RpcMessage;
 import com.potato.rpc.transport.model.RpcRequest;
@@ -28,11 +29,13 @@ public class ClientProxyFactory{
     private final Logger logger = LoggerFactory.getLogger(ClientProxyFactory.class);
     private PotatoClient potatoClient;
     private LoadBalancer loadBalancer;
+    private ServiceDiscovery serviceDiscovery;
     private Map<Class<?>, Object> objectCache = new HashMap<>();
 
-    public ClientProxyFactory(PotatoClient potatoClient,LoadBalancer loadBalancer){
+    public ClientProxyFactory(PotatoClient potatoClient,LoadBalancer loadBalancer,ServiceDiscovery serviceDiscovery){
         this.potatoClient = potatoClient;
         this.loadBalancer = loadBalancer;
+        this.serviceDiscovery = serviceDiscovery;
     }
     /**
      * 通过Java动态代理获取服务代理类
@@ -72,7 +75,7 @@ public class ClientProxyFactory{
             logger.info("method: {}", method);
             // 1.获得服务信息
             String serviceName = clazz.getName();
-            List<ProviderInfo> list = ServerDiscoveryCache.SERVER_MAP.get(serviceName);
+            List<ProviderInfo> list = serviceDiscovery.getProviderInfo(serviceName);
             ProviderInfo providerInfo = loadBalancer.select(list);
             logger.info("get serviceName {} providerInfo {}",serviceName,providerInfo);
             RpcRequest rpcRequest = new RpcRequest();

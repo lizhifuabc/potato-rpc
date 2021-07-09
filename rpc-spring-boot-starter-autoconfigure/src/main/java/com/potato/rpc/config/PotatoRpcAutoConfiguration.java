@@ -51,10 +51,10 @@ public class PotatoRpcAutoConfiguration {
         return new NettyServer(potatoRpcConfigProperties.getPort(),serviceRegistry);
     }
     @Bean
-    public ClientProxyFactory clientProxyFactory() {
+    public ClientProxyFactory clientProxyFactory( @Autowired ServiceDiscovery serviceDiscovery) {
         PotatoClient potatoClient = new NettyClient();
         LoadBalancer loadBalancer = new RandomLoadBalance();
-        return new ClientProxyFactory(potatoClient,loadBalancer);
+        return new ClientProxyFactory(potatoClient,loadBalancer,serviceDiscovery);
     }
     @Bean
     public ServiceDiscovery serviceDiscovery() {

@@ -13,8 +13,5 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2021/6/28
  */
 public class ServerDiscoveryCache {
-    /**
-     * key: serviceName
-     */
-    public static final Map<String, List<ProviderInfo>> SERVER_MAP = new ConcurrentHashMap<>();
+
 }
