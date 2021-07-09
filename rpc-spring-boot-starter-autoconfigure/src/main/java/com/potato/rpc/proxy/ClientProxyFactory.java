@@ -1,6 +1,5 @@
 package com.potato.rpc.proxy;
 
-import com.potato.rpc.client.cache.ServerDiscoveryCache;
 import com.potato.rpc.register.ServiceDiscovery;
 import com.potato.rpc.transport.model.RequestMessageType;
 import com.potato.rpc.transport.model.RpcMessage;

@@ -1,7 +1,6 @@
 package com.potato.rpc.register.zk;
 
 import com.alibaba.fastjson.JSONObject;
-import com.potato.rpc.client.cache.ServerDiscoveryCache;
 import com.potato.rpc.common.exception.PotatoRuntimeException;
 import com.potato.rpc.config.RegistryConfig;
 import com.potato.rpc.register.AbstractDiscovery;
