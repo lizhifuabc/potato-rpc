@@ -1,6 +1,5 @@
 package com.potato.rpc.loadbalance;
 
-import com.potato.rpc.common.model.ServerInfo;
 import com.potato.rpc.register.ProviderInfo;
 
 import java.util.List;

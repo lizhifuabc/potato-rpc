@@ -1,7 +1,6 @@
 package com.potato.rpc.loadbalance.impl;
 
 import com.potato.rpc.loadbalance.LoadBalancer;
-import com.potato.rpc.common.model.ServerInfo;
 import com.potato.rpc.register.ProviderInfo;
 
 import java.util.ArrayList;
@@ -14,17 +13,17 @@ import java.util.List;
  * @date 2021/6/25
  */
 public abstract class AbstractLoadBalancer implements LoadBalancer {
-    /**
-     * 获取权重
-     * @param ServerInfo
-     * @return
-     */
-    protected int getWeight(ServerInfo ServerInfo){
-        if(ServerInfo != null && ServerInfo.isEnable()){
-            return ServerInfo.getWeight();
-        }
-        return -1;
-    }
+//    /**
+//     * 获取权重
+//     * @param ServerInfo
+//     * @return
+//     */
+//    protected int getWeight(ServerInfo ServerInfo){
+//        if(ServerInfo != null && ServerInfo.isEnable()){
+//            return ServerInfo.getWeight();
+//        }
+//        return -1;
+//    }
     @Override
     public ProviderInfo select(List<ProviderInfo> list) {
         if(list == null){

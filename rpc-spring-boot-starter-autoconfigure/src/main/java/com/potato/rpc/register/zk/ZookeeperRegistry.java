@@ -63,6 +63,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
             if (providerInfoMap.containsKey(providerInfo.getServiceName())) {
                 return;
             }
+            providerInfoMap.put(providerInfo.getServiceName(),providerInfo);
             //创建service永久节点：/env/com.test.service
             String servicePath = "/".concat(providerInfo.getServiceName());
             Stat stat = zkClient().checkExists().forPath(servicePath);
@@ -77,6 +78,11 @@ public class ZookeeperRegistry extends AbstractRegistry {
         }catch (Exception e){
             throw new PotatoRuntimeException("ZookeeperRegistry registry exception", e);
         }
+    }
+
+    @Override
+    public ProviderInfo getProviderInfo(String serviceName) {
+        return providerInfoMap.get(serviceName);
     }
 
     @Override

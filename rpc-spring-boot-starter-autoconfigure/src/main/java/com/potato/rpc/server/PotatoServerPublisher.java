@@ -119,6 +119,7 @@ public class PotatoServerPublisher implements ApplicationListener<ContextRefresh
             providerInfo.setWeight(10);
             providerInfo.setEnable(1);
             providerInfo.setPort(potatoRpcConfigProperties.getPort());
+            providerInfo.setObj(obj);
             serviceRegistry.register(providerInfo);
         }
         potatoServer.start();

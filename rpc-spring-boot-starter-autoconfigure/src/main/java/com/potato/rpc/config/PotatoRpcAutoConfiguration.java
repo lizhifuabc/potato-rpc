@@ -47,8 +47,8 @@ public class PotatoRpcAutoConfiguration {
         return serviceRegistry;
     }
     @Bean
-    public PotatoServer nettyServer() {
-        return new NettyServer(potatoRpcConfigProperties.getPort());
+    public PotatoServer nettyServer(@Autowired ServiceRegistry serviceRegistry) {
+        return new NettyServer(potatoRpcConfigProperties.getPort(),serviceRegistry);
     }
     @Bean
     public ClientProxyFactory clientProxyFactory() {

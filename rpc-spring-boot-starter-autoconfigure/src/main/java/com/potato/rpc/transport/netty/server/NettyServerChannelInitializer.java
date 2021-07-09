@@ -1,5 +1,6 @@
 package com.potato.rpc.transport.netty.server;
 
+import com.potato.rpc.register.ServiceRegistry;
 import com.potato.rpc.transport.netty.coder.NettyDecoder;
 import com.potato.rpc.transport.netty.coder.NettyEncoder;
 import io.netty.channel.ChannelInitializer;
@@ -17,8 +18,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class NettyServerChannelInitializer extends ChannelInitializer<SocketChannel> {
     private EventExecutorGroup eventExecutorGroup;
-    public NettyServerChannelInitializer(EventExecutorGroup eventExecutorGroup){
+    private ServiceRegistry serviceRegistry;
+    public NettyServerChannelInitializer(EventExecutorGroup eventExecutorGroup,ServiceRegistry serviceRegistry){
         this.eventExecutorGroup = eventExecutorGroup;
+        this.serviceRegistry = serviceRegistry;
     }
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
@@ -27,6 +30,6 @@ public class NettyServerChannelInitializer extends ChannelInitializer<SocketChan
         socketChannel.pipeline().addLast(new NettyDecoder());
         socketChannel.pipeline().addLast(new NettyEncoder());
         //创建一个EventExecutorGroup并将其和channelHandler绑定
-        socketChannel.pipeline().addLast(eventExecutorGroup,new NettyServerHandlerAdapter());
+        socketChannel.pipeline().addLast(eventExecutorGroup,new NettyServerHandlerAdapter(serviceRegistry));
     }
 }

@@ -1,5 +1,6 @@
 package com.potato.rpc.transport.netty.server;
 
+import com.potato.rpc.register.ServiceRegistry;
 import com.potato.rpc.transport.PotatoServer;
 import com.potato.rpc.server.ServerPublisherConfig;
 import com.potato.rpc.util.SysUtil;
@@ -31,9 +32,11 @@ public class NettyServer implements PotatoServer {
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
     private EventExecutorGroup serviceHandlerGroup;
+    private ServiceRegistry serviceRegistry;
     private int port;
-    public NettyServer(int port){
+    public NettyServer(int port,ServiceRegistry serviceRegistry){
         this.port = port;
+        this.serviceRegistry = serviceRegistry;
     }
     @Override
     public void start() {
@@ -55,7 +58,7 @@ public class NettyServer implements PotatoServer {
             b.group(bossGroup, workerGroup).channel(workerGroup instanceof EpollEventLoopGroup ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     // 当客户端第一次进行请求的时候才会进行初始化
-                    .childHandler(new NettyServerChannelInitializer(serviceHandlerGroup))
+                    .childHandler(new NettyServerChannelInitializer(serviceHandlerGroup,serviceRegistry))
                     //表示系统用于临时存放已完成三次握手的请求的队列的最大长度,如果连接建立频繁，服务器处理创建新连接较慢，可以适当调大这个参数
                     .option(ChannelOption.SO_BACKLOG, 1024)
                     .option(ChannelOption.SO_REUSEADDR, true)

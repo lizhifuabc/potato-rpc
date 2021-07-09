@@ -17,4 +17,11 @@ public interface ServiceRegistry extends Destroyable, Initializable, Startable {
      * @param providerInfo 服务注册信息
      */
     public void register(ProviderInfo providerInfo);
+
+    /**
+     * 获取服务接口信息
+     * @param serviceName
+     * @return
+     */
+    public ProviderInfo getProviderInfo (String serviceName);
 }

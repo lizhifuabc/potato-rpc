@@ -5,6 +5,7 @@ import com.potato.rpc.transport.model.ResponseMessageType;
 import com.potato.rpc.transport.model.RpcMessage;
 import com.potato.rpc.transport.model.RpcResponse;
 import com.potato.rpc.transport.netty.CompletableFutureHelper;
+import com.potato.rpc.util.RandomUtil;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -59,6 +60,7 @@ public class NettyClientHandlerAdapter extends ChannelInboundHandlerAdapter {
             if (state == IdleState.WRITER_IDLE) {
                 logger.info("write idle happen [{}]", ctx.channel().remoteAddress());
                 RpcMessage rpcMessage = new RpcMessage();
+                rpcMessage.setRequestId(RandomUtil.uuid());
                 rpcMessage.setMessageType(RequestMessageType.REQUEST_TYPE_HEARTBEAT);
                 rpcMessage.setData("PING");
                 ctx.writeAndFlush(rpcMessage).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);

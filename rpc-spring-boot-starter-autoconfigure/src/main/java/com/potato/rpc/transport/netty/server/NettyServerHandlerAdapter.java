@@ -1,12 +1,12 @@
 package com.potato.rpc.transport.netty.server;
 
+import com.potato.rpc.register.ProviderInfo;
+import com.potato.rpc.register.ServiceRegistry;
 import com.potato.rpc.transport.model.RequestMessageType;
 import com.potato.rpc.transport.model.ResponseMessageType;
 import com.potato.rpc.transport.model.RpcMessage;
 import com.potato.rpc.transport.model.RpcRequest;
 import com.potato.rpc.transport.model.RpcResponse;
-import com.potato.rpc.common.model.ServiceObject;
-import com.potato.rpc.server.cache.ServerRegistryCache;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -26,6 +26,10 @@ import java.lang.reflect.Method;
  */
 public class NettyServerHandlerAdapter extends ChannelInboundHandlerAdapter {
     private final static Logger logger = LoggerFactory.getLogger(NettyServerHandlerAdapter.class);
+    private ServiceRegistry serviceRegistry;
+    public NettyServerHandlerAdapter(ServiceRegistry serviceRegistry){
+        this.serviceRegistry = serviceRegistry;
+    }
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         try {
@@ -37,11 +41,11 @@ public class NettyServerHandlerAdapter extends ChannelInboundHandlerAdapter {
                     rpcMessage.setData("PONG");
                 }else {
                     RpcRequest rpcRequest = (RpcRequest) rpcMessage.getData();
-                    ServiceObject serviceObject = ServerRegistryCache.SERVER_MAP.get(rpcRequest.getServiceName());
+                    ProviderInfo providerInfo = serviceRegistry.getProviderInfo(rpcRequest.getServiceName());
                     Method method = null;
                     try {
-                        method = serviceObject.getObj().getClass().getMethod(rpcRequest.getMethod(), rpcRequest.getParameterTypes());
-                        Object returnValue = method.invoke(serviceObject.getObj(), rpcRequest.getParameters());
+                        method = providerInfo.getObj().getClass().getMethod(rpcRequest.getMethod(), rpcRequest.getParameterTypes());
+                        Object returnValue = method.invoke(providerInfo.getObj(), rpcRequest.getParameters());
                         RpcResponse response = new RpcResponse();
                         response.setReturnValue(returnValue);
                         rpcMessage.setMessageType(ResponseMessageType.RESPONSE_TYPE_NORMAL);

@@ -10,6 +10,10 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class ProviderInfo {
     /**
+     * 具体服务
+     */
+    private Object obj;
+    /**
      * 接口名称
      */
     private String serviceName;
@@ -79,5 +83,13 @@ public class ProviderInfo {
 
     public void setEnable(int enable) {
         this.enable = enable;
+    }
+
+    public Object getObj() {
+        return obj;
+    }
+
+    public void setObj(Object obj) {
+        this.obj = obj;
     }
 }
