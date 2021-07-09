@@ -29,7 +29,7 @@ public class KryoSerializer implements PotatoSerializer {
     public byte[] serialize(Object object) {
         //try-with-resource语句，该语句确保了每个资源,在语句结束时关闭
         try ( ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-              Output output = new Output(byteArrayOutputStream);){
+              Output output = new Output(byteArrayOutputStream)){
             Kryo kryo = kryoThreadLocal.get();
             //将对象序列化为byte数组
             kryo.writeObject(output, object);
@@ -44,7 +44,7 @@ public class KryoSerializer implements PotatoSerializer {
     public <T> T deserialize(byte[] bytes, Class<T> clazz) {
         //try-with-resource语句，该语句确保了每个资源,在语句结束时关闭
         try ( ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-              Input input = new Input(byteArrayInputStream);){
+              Input input = new Input(byteArrayInputStream)){
             Kryo kryo = kryoThreadLocal.get();
             //反序列化出对对象
             Object o = kryo.readObject(input, clazz);
