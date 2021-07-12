@@ -14,6 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2021/7/2
  */
 public enum SerializerFactory {
+    /**
+     * INSTANCE
+     */
     INSTANCE;
     private PotatoSerializer potatoSerializer;
     private Map<Integer,PotatoSerializer> serverPotatoSerializer = new ConcurrentHashMap<>();
