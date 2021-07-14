@@ -3,6 +3,7 @@ package com.potato.rpc.server;
 import com.potato.rpc.annotation.PotatoRpcClient;
 import com.potato.rpc.annotation.PotatoRpcServer;
 import com.potato.rpc.config.PotatoRpcConfigProperties;
+import com.potato.rpc.serializer.SerializerFactory;
 import com.potato.rpc.transport.PotatoServer;
 import com.potato.rpc.proxy.ClientProxyFactory;
 import com.potato.rpc.register.ProviderInfo;
@@ -120,6 +121,7 @@ public class PotatoServerPublisher implements ApplicationListener<ContextRefresh
             providerInfo.setEnable(1);
             providerInfo.setPort(potatoRpcConfigProperties.getPort());
             providerInfo.setObj(obj);
+            providerInfo.setSerializerType(SerializerFactory.INSTANCE.getSerializerType());
             serviceRegistry.register(providerInfo);
         }
         potatoServer.start();

@@ -1,6 +1,7 @@
 package com.potato.rpc.proxy;
 
 import com.potato.rpc.register.ServiceDiscovery;
+import com.potato.rpc.serializer.SerializerFactory;
 import com.potato.rpc.transport.model.RequestMessageType;
 import com.potato.rpc.transport.model.RpcMessage;
 import com.potato.rpc.transport.model.RpcRequest;

@@ -45,7 +45,7 @@ public class NettyDecoder extends LengthFieldBasedFrameDecoder {
         byte[] data = new byte[dataLength];
         in.readBytes(data);
         try {
-            return SerializerFactory.INSTANCE.serverPotatoSerializer(serializeType).deserialize(data,RpcMessage.class);
+            return SerializerFactory.INSTANCE.deserialize(data,RpcMessage.class,serializeType);
         } catch (Exception ex) {
             logger.error("decode error: " + ex.toString());
         }

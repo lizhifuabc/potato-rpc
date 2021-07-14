@@ -1,0 +1,2 @@
+kryo=com.potato.rpc.serializer.kryo.KryoSerializer
+jdk=com.potato.rpc.serializer.jdk.JDKSerializer

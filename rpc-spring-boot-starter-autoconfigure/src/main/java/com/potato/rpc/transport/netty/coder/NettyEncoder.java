@@ -26,7 +26,7 @@ public class NettyEncoder extends MessageToByteEncoder{
         //魔数:4B
         byteBuf.writeInt(MAGIC_NUMBER);
         //序列化类型：4B
-        byteBuf.writeInt(SerializerFactory.INSTANCE.serializerType());
+        byteBuf.writeInt(SerializerFactory.INSTANCE.getByteSerializerType());
         //数据长度：4B
         byteBuf.writeInt(data.length);
         //发送的数据:长度不定

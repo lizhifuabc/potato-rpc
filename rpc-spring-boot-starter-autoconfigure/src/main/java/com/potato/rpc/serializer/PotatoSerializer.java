@@ -1,11 +1,14 @@
 package com.potato.rpc.serializer;
 
+import com.potato.rpc.common.extension.SPI;
+
 /**
  * 序列化接口
  *
  * @author lizhifu
  * @date 2021/7/2
  */
+@SPI
 public interface PotatoSerializer {
     /**
      * 序列化（对象 -> 字节数组）

@@ -1,6 +1,7 @@
 package com.potato.rpc.serializer;
 
 
+import com.potato.rpc.common.extension.ExtensionLoader;
 import com.potato.rpc.serializer.jdk.JDKSerializer;
 import com.potato.rpc.serializer.kryo.KryoSerializer;
 
@@ -18,40 +19,21 @@ public enum SerializerFactory {
      * INSTANCE
      */
     INSTANCE;
-    private PotatoSerializer potatoSerializer;
-    private Map<Integer,PotatoSerializer> serverPotatoSerializer = new ConcurrentHashMap<>();
-    private int serializerType;
-    public PotatoSerializer serverPotatoSerializer(int serializerType){
-        if(serverPotatoSerializer.get(serializerType) == null){
-            switch(serializerType){
-                case 1 :
-                    serverPotatoSerializer.putIfAbsent(serializerType,new KryoSerializer());
-                    break;
-                default :
-                    serverPotatoSerializer.putIfAbsent(serializerType,new JDKSerializer());
-            }
-        }
-        return serverPotatoSerializer.get(serializerType);
-    }
+    private String serializerType;
     public <T> byte[] serialize(T object) {
-        byte[] bytes = potatoSerializer.serialize(object);;
-        return bytes;
+        return ExtensionLoader.getExtensionLoader(PotatoSerializer.class).getExtension(serializerType).serialize(object);
     }
-    public int serializerType(){
-        return serializerType;
-    }
-    public<T> T deserialize(byte[] bytes, Class<T> clazz) {
-        return potatoSerializer.deserialize(bytes,clazz);
+    public<T> T deserialize(byte[] bytes, Class<T> clazz,int serializerType) {
+        return ExtensionLoader.getExtensionLoader(PotatoSerializer.class).getExtension(SerializerType.getName(serializerType)).deserialize(bytes,clazz);
     }
     public synchronized void setPotatoSerialize(String serializerType) {
-        switch(serializerType){
-            case "KRYO" :
-                this.potatoSerializer = new KryoSerializer();
-                this.serializerType = 1;
-                break;
-            default :
-                this.potatoSerializer = new JDKSerializer();
-                this.serializerType = 0;
-        }
+        this.serializerType = serializerType;
+    }
+
+    public String getSerializerType() {
+        return serializerType;
+    }
+    public byte getByteSerializerType() {
+       return SerializerType.getCode(serializerType);
     }
 }

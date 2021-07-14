@@ -18,6 +18,10 @@ public class ProviderInfo {
      */
     private String serviceName;
     /**
+     * 序列化方式
+     */
+    private String serializerType;
+    /**
      * IP
      */
     private String ip;
@@ -34,6 +38,14 @@ public class ProviderInfo {
      */
     private int enable;
 
+    public String getSerializerType() {
+        return serializerType;
+    }
+
+    public void setSerializerType(String serializerType) {
+        this.serializerType = serializerType;
+    }
+
     /**
      * json数据
      * @return json格式数据
@@ -42,6 +54,7 @@ public class ProviderInfo {
         JSONObject jsonChildData = new JSONObject();
         jsonChildData.put("weight", weight);
         jsonChildData.put("enable", enable);
+        jsonChildData.put("serializerType", serializerType);
         return jsonChildData.toJSONString();
     }
 

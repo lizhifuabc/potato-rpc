@@ -40,7 +40,7 @@ public class PotatoRpcConfigProperties {
     /**
      * 序列化方式
      */
-    private String serializerType = "JDK";
+    private String serializerType;
     /**
      * 负载均衡算法
      */
