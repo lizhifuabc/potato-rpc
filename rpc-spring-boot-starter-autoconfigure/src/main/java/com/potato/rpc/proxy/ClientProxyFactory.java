@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 客户端代理工厂
@@ -90,7 +91,7 @@ public class ClientProxyFactory{
             rpcMessage.setMessageType(RequestMessageType.REQUEST_TYPE_NORMAL);
 
             CompletableFuture<RpcMessage> completableFuture = potatoClient.request(rpcMessage,providerInfo);
-            RpcResponse rpcResponse = (RpcResponse) completableFuture.get().getData();
+            RpcResponse rpcResponse = (RpcResponse) completableFuture.get(3, TimeUnit.SECONDS).getData();
             return rpcResponse.getReturnValue();
         }
     }
