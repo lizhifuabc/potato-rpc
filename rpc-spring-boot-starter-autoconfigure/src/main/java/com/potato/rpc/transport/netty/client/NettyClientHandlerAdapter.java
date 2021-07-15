@@ -62,6 +62,7 @@ public class NettyClientHandlerAdapter extends ChannelInboundHandlerAdapter {
                 rpcMessage.setRequestId(RandomUtil.uuid());
                 rpcMessage.setMessageType(RequestMessageType.REQUEST_TYPE_HEARTBEAT);
                 rpcMessage.setData("PING");
+                //发送失败，关闭
                 ctx.writeAndFlush(rpcMessage).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
             }
         } else {

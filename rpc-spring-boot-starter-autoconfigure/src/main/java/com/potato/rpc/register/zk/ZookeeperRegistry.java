@@ -60,10 +60,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
     @Override
     public void register(ProviderInfo providerInfo) {
         try {
-            if (providerInfoMap.containsKey(providerInfo.getServiceName())) {
-                return;
-            }
-            providerInfoMap.put(providerInfo.getServiceName(),providerInfo);
+            providerInfoMap.putIfAbsent(providerInfo.getServiceName(),providerInfo);
             //创建service永久节点：/env/com.test.service
             String servicePath = "/".concat(providerInfo.getServiceName());
             Stat stat = zkClient().checkExists().forPath(servicePath);
@@ -127,6 +124,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
     }
     private void recoverRegistryData() {
         for (String serviceName : providerInfoMap.keySet()) {
+            logger.info("ZookeeperRegistry recoverRegistryData serviceName {}",serviceName);
             register(providerInfoMap.get(serviceName));
         }
     }
