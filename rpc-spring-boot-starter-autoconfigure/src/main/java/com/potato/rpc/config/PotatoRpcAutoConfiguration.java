@@ -2,6 +2,8 @@ package com.potato.rpc.config;
 
 import com.potato.rpc.loadbalance.LoadBalancer;
 import com.potato.rpc.loadbalance.impl.RandomLoadBalance;
+import com.potato.rpc.register.nacos.NacosDiscovery;
+import com.potato.rpc.register.nacos.NacosRegistry;
 import com.potato.rpc.serializer.kryo.KryoSerializer;
 import com.potato.rpc.transport.PotatoClient;
 import com.potato.rpc.transport.netty.client.NettyClient;
@@ -39,7 +41,12 @@ public class PotatoRpcAutoConfiguration {
         registryConfig.setEnv(potatoRpcConfigProperties.getEnv());
         registryConfig.setAddress(potatoRpcConfigProperties.getRegisterAddress());
         registryConfig.setConnectTimeout(potatoRpcConfigProperties.getConnectTimeout());
-        ServiceRegistry serviceRegistry = new ZookeeperRegistry(registryConfig);
+        ServiceRegistry serviceRegistry;
+        if(potatoRpcConfigProperties.getRegistry().equals("nacos")){
+            serviceRegistry = new NacosRegistry(registryConfig);
+        }else {
+            serviceRegistry = new ZookeeperRegistry(registryConfig);
+        }
         serviceRegistry.init();
         serviceRegistry.start();
         RegistryFactory.put(registryConfig,serviceRegistry);
@@ -61,7 +68,12 @@ public class PotatoRpcAutoConfiguration {
         registryConfig.setEnv(potatoRpcConfigProperties.getEnv());
         registryConfig.setAddress(potatoRpcConfigProperties.getRegisterAddress());
         registryConfig.setConnectTimeout(potatoRpcConfigProperties.getConnectTimeout());
-        ServiceDiscovery serviceDiscovery = new ZkServiceDiscovery(registryConfig);
+        ServiceDiscovery serviceDiscovery;
+        if(potatoRpcConfigProperties.getRegistry().equals("zk")){
+            serviceDiscovery = new ZkServiceDiscovery(registryConfig);
+        }else {
+            serviceDiscovery = new NacosDiscovery(registryConfig);
+        }
         serviceDiscovery.init();
         serviceDiscovery.start();
         RegistryFactory.put(registryConfig,serviceDiscovery);

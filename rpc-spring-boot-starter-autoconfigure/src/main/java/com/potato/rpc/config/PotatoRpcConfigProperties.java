@@ -12,10 +12,19 @@ public class PotatoRpcConfigProperties {
      * 环境
      */
     private String env = "dev";
+
+    public String getRegistry() {
+        return registry;
+    }
+
+    public void setRegistry(String registry) {
+        this.registry = registry;
+    }
+
     /**
-     * 服务
+     * 注册中心
      */
-    private String server = "netty";
+    private String registry;
     /**
      * 服务注册中心地址
      */
@@ -45,10 +54,6 @@ public class PotatoRpcConfigProperties {
      * 负载均衡算法
      */
     private String loadBalance = "random";
-    /**
-     * 权重，默认为1
-     */
-    private Integer weight = 10;
 
     public String getSerializerType() {
         return serializerType;
@@ -56,14 +61,6 @@ public class PotatoRpcConfigProperties {
 
     public void setSerializerType(String serializerType) {
         this.serializerType = serializerType;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
     }
 
     public String getLoadBalance() {
@@ -105,15 +102,6 @@ public class PotatoRpcConfigProperties {
     public void setEnv(String env) {
         this.env = env;
     }
-
-    public String getServer() {
-        return server;
-    }
-
-    public void setServer(String server) {
-        this.server = server;
-    }
-
     public int getRetryCount() {
         return retryCount;
     }

@@ -1,5 +1,6 @@
 package com.potato.rpc.proxy;
 
+import com.potato.rpc.common.exception.PotatoRuntimeException;
 import com.potato.rpc.register.ServiceDiscovery;
 import com.potato.rpc.serializer.SerializerFactory;
 import com.potato.rpc.transport.model.RequestMessageType;
@@ -78,6 +79,9 @@ public class ClientProxyFactory{
             String serviceName = clazz.getName();
             List<ProviderInfo> list = serviceDiscovery.getProviderInfo(serviceName);
             ProviderInfo providerInfo = loadBalancer.select(list);
+            if(providerInfo == null){
+                throw new PotatoRuntimeException("no provider found");
+            }
             logger.info("get serviceName {} providerInfo {}",serviceName,providerInfo);
             RpcRequest rpcRequest = new RpcRequest();
             rpcRequest.setMethod(method.getName());

@@ -1,0 +1,2 @@
+nacos=com.potato.rpc.register.nacos.NacosRegistry
+zk=com.potato.rpc.register.zk.ZookeeperRegistry

@@ -10,13 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>rpc-spring-boot-starter-autoconfigure</artifactId>
     <dependencies>
-        <!-- zookeeper -->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.zookeeper</groupId>-->
-<!--            <artifactId>zookeeper</artifactId>-->
-<!--            <version>3.4.6</version>-->
-<!--        </dependency>-->
-        <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>${nacos.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -54,6 +52,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <fastjson.version>1.2.58</fastjson.version>
+        <nacos.version>2.0.2</nacos.version>
         <netty.version>4.1.19.Final</netty.version>
         <apache-curator.version>5.1.0</apache-curator.version>
     </properties>

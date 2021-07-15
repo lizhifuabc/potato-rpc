@@ -26,7 +26,7 @@ public abstract class AbstractLoadBalancer implements LoadBalancer {
 //    }
     @Override
     public ProviderInfo select(List<ProviderInfo> list) {
-        if(list == null){
+        if(list == null || list.size() == 0){
             return null;
         }
         if(list.size() == 1){
