@@ -14,21 +14,11 @@ import java.util.Map;
  */
 public class RpcResponse implements Serializable {
 
-    private Map<String, String> headers = new HashMap<>();
-
     private Object returnValue;
 
     private Exception exception;
 
     private PotatoRpcStatusEnum potatoRpcStatusEnum;
-
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
-    }
 
     public Object getReturnValue() {
         return returnValue;
@@ -57,7 +47,6 @@ public class RpcResponse implements Serializable {
     @Override
     public String toString() {
         return "RpcResponse{" +
-                "headers=" + headers +
                 ", returnValue=" + returnValue +
                 ", exception=" + exception +
                 ", potatoRpcStatusEnum=" + potatoRpcStatusEnum +

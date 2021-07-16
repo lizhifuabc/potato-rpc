@@ -1,5 +1,6 @@
 package com.potato.rpc.transport.netty.server;
 
+import com.potato.rpc.common.constants.PotatoRpcStatusEnum;
 import com.potato.rpc.register.ProviderInfo;
 import com.potato.rpc.register.ServiceRegistry;
 import com.potato.rpc.transport.model.RequestMessageType;
@@ -43,17 +44,23 @@ public class NettyServerHandlerAdapter extends ChannelInboundHandlerAdapter {
                     RpcRequest rpcRequest = (RpcRequest) rpcMessage.getData();
                     ProviderInfo providerInfo = serviceRegistry.getProviderInfo(rpcRequest.getServiceName());
                     Method method = null;
+                    rpcMessage.setMessageType(ResponseMessageType.RESPONSE_TYPE_NORMAL);
+                    RpcResponse response = new RpcResponse();
                     try {
                         method = providerInfo.getObj().getClass().getMethod(rpcRequest.getMethod(), rpcRequest.getParameterTypes());
                         Object returnValue = method.invoke(providerInfo.getObj(), rpcRequest.getParameters());
-                        RpcResponse response = new RpcResponse();
                         response.setReturnValue(returnValue);
-                        rpcMessage.setMessageType(ResponseMessageType.RESPONSE_TYPE_NORMAL);
-                        rpcMessage.setData(response);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        response.setPotatoRpcStatusEnum(PotatoRpcStatusEnum.SUCCESS);
+                    } catch (NoSuchMethodException e) {
+                        response.setException(e);
+                        response.setPotatoRpcStatusEnum(PotatoRpcStatusEnum.NOT_FOUND);
+                    }catch (Exception e){
+                        response.setException(e);
+                        response.setPotatoRpcStatusEnum(PotatoRpcStatusEnum.ERROR);
                     }
+                    rpcMessage.setData(response);
                 }
+                //如果写入失败，则自动关闭通道
                 ctx.writeAndFlush(rpcMessage).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
             }
         } finally {

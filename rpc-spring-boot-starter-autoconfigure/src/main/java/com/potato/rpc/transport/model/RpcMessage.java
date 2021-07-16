@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public class RpcMessage implements Serializable {
     /**
-     * 请求ID
+     * 请求的Id, 唯一标识该请求
      */
     private String requestId;
     /**

@@ -21,10 +21,13 @@ public class RpcRequest implements Serializable {
      */
     private String method;
 
-    private Map<String,String> headers = new HashMap<>();
-
+    /**
+     * 参数类型
+     */
     private Class<?>[] parameterTypes;
-
+    /**
+     * 具体参数
+     */
     private Object[] parameters;
 
     public String getServiceName() {
@@ -41,14 +44,6 @@ public class RpcRequest implements Serializable {
 
     public void setMethod(String method) {
         this.method = method;
-    }
-
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
     }
 
     public Class<?>[] getParameterTypes() {
@@ -72,7 +67,6 @@ public class RpcRequest implements Serializable {
         return "RpcRequest{" +
                 "serviceName='" + serviceName + '\'' +
                 ", method='" + method + '\'' +
-                ", headers=" + headers +
                 ", parameterTypes=" + Arrays.toString(parameterTypes) +
                 ", parameters=" + Arrays.toString(parameters) +
                 '}';
