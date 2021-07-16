@@ -58,8 +58,8 @@ public class NettyServer implements PotatoServer {
                     SysUtil.cpus() * 2,
                     ThreadPoolFactoryUtil.createThreadFactory("service-handler-group", false)
             );
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(bossGroup, workerGroup).channel(workerGroup instanceof EpollEventLoopGroup ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
+            ServerBootstrap serverBootstrap = new ServerBootstrap();
+            serverBootstrap.group(bossGroup, workerGroup).channel(workerGroup instanceof EpollEventLoopGroup ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
                     // 当客户端第一次进行请求的时候才会进行初始化
                     .childHandler(new NettyServerChannelInitializer(serviceHandlerGroup,serviceRegistry))
@@ -67,11 +67,15 @@ public class NettyServer implements PotatoServer {
                     // 如果未设置或所设置的值小于1，Java将使用默认值50。
                     // 如果大于队列的最大长度，请求会被拒绝
                     .option(ChannelOption.SO_BACKLOG, 1024)
-                    .option(ChannelOption.SO_REUSEADDR, true)
-                    // 是否开启 TCP 底层心跳机制
-                    .childOption(ChannelOption.SO_KEEPALIVE, true);
+                    .option(ChannelOption.SO_REUSEADDR, true);
+
+            // TCP默认开启了 Nagle 算法，该算法的作用是尽可能的发送大数据快，减少网络传输。TCP_NODELAY 参数的作用就是控制是否启用 Nagle 算法。
+            serverBootstrap.childOption(ChannelOption.TCP_NODELAY, true);
+            // 是否开启 TCP 底层心跳机制
+            serverBootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
+
             // 绑定端口，同步等待绑定成功
-            bossChannel = b.bind(port).sync().channel();
+            bossChannel = serverBootstrap.bind(port).sync().channel();
             //jvm中增加一个关闭的钩子
             Runtime.getRuntime().addShutdownHook(new Thread(){
                 @Override
