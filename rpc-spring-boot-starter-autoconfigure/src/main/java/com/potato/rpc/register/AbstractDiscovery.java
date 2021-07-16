@@ -1,7 +1,10 @@
 package com.potato.rpc.register;
 
 import com.potato.rpc.config.RegistryConfig;
-import com.potato.rpc.register.ServiceDiscovery;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 服务发现
@@ -10,6 +13,10 @@ import com.potato.rpc.register.ServiceDiscovery;
  * @date 2021/7/8
  */
 public abstract class AbstractDiscovery implements ServiceDiscovery {
+    /**
+     * key: serviceName
+     */
+    protected Map<String, List<ProviderInfo>> SERVER_MAP = new ConcurrentHashMap<>();
     /**
      * 注册中心配置
      */
@@ -21,6 +28,11 @@ public abstract class AbstractDiscovery implements ServiceDiscovery {
      */
     protected AbstractDiscovery(RegistryConfig registryConfig) {
         this.registryConfig = registryConfig;
+    }
+
+    @Override
+    public List<ProviderInfo> getProviderInfo(String serviceName) {
+        return SERVER_MAP.get(serviceName);
     }
 
 }

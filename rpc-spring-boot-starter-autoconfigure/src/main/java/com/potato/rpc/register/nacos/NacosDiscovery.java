@@ -14,8 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * nacos
@@ -25,10 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class NacosDiscovery extends AbstractDiscovery {
     private final static Logger logger = LoggerFactory.getLogger(NacosDiscovery.class);
-    /**
-     * key: serviceName
-     */
-    private Map<String, List<ProviderInfo>> SERVER_MAP = new ConcurrentHashMap<>();
     private NamingService namingService;
     /**
      * 注册中心配置
@@ -105,10 +99,5 @@ public class NacosDiscovery extends AbstractDiscovery {
         } catch (NacosException e) {
             throw new PotatoRuntimeException("NacosDiscovery discovery exception", e);
         }
-    }
-
-    @Override
-    public List<ProviderInfo> getProviderInfo(String serviceName) {
-        return SERVER_MAP.get(serviceName);
     }
 }

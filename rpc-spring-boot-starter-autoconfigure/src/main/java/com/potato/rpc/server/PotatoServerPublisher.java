@@ -44,15 +44,6 @@ public class PotatoServerPublisher implements ApplicationListener<ContextRefresh
     public PotatoServerPublisher(ClientProxyFactory clientProxyFactory,
                                  PotatoServer potatoServer, ServiceRegistry serviceRegistry,
                                  ServiceDiscovery serviceDiscovery, PotatoRpcConfigProperties potatoRpcConfigProperties){
-        if(potatoRpcConfigProperties.getServerType() == null || potatoRpcConfigProperties.getServerType().equals(PotatoServerTypeEnum.ALL)){
-
-        }
-        if(potatoRpcConfigProperties.getServerType().equals(PotatoServerTypeEnum.CLIENT)){
-
-        }
-        if(potatoRpcConfigProperties.getServerType().equals(PotatoServerTypeEnum.SERVER)){
-
-        }
         this.potatoServer = potatoServer;
         this.serviceRegistry = serviceRegistry;
         this.serviceDiscovery = serviceDiscovery;
@@ -65,13 +56,27 @@ public class PotatoServerPublisher implements ApplicationListener<ContextRefresh
         if (Objects.isNull(contextRefreshedEvent.getApplicationContext().getParent())){
             logger.info("spring init success");
             ApplicationContext context = contextRefreshedEvent.getApplicationContext();
-            //开启服务
-            startServer(context);
-            //客户端
-            try {
-                startClient(context);
-            } catch (Exception e) {
-                e.printStackTrace();
+            if(potatoRpcConfigProperties.getServerType() == null || potatoRpcConfigProperties.getServerType().equals(PotatoServerTypeEnum.ALL)){
+                //开启服务
+                startServer(context);
+                //客户端
+                try {
+                    startClient(context);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(potatoRpcConfigProperties.getServerType().equals(PotatoServerTypeEnum.CLIENT)){
+                //客户端
+                try {
+                    startClient(context);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(potatoRpcConfigProperties.getServerType().equals(PotatoServerTypeEnum.SERVER)){
+                //开启服务
+                startServer(context);
             }
         }
     }

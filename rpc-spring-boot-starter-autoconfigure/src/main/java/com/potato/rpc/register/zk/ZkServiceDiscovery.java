@@ -32,10 +32,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2021/7/8
  */
 public class ZkServiceDiscovery extends AbstractDiscovery {
-    /**
-     * key: serviceName
-     */
-    private Map<String, List<ProviderInfo>> SERVER_MAP = new ConcurrentHashMap<>();
     private final static Logger logger = LoggerFactory.getLogger(ZkServiceDiscovery.class);
     /**
      * ZooKeeper client
@@ -149,12 +145,6 @@ public class ZkServiceDiscovery extends AbstractDiscovery {
             throw new PotatoRuntimeException("ZkServiceDiscovery discovery exception", e);
         }
     }
-
-    @Override
-    public List<ProviderInfo> getProviderInfo(String serviceName) {
-        return SERVER_MAP.get(serviceName);
-    }
-
     private void updateProviderInfo(ChildData childData, String serviceName) {
         try {
             String data = new String(childData.getData(), "UTF-8");
