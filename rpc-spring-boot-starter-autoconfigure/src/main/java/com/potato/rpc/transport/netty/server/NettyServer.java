@@ -65,7 +65,7 @@ public class NettyServer implements PotatoServer {
                     .option(ChannelOption.SO_BACKLOG, 1024)
                     .option(ChannelOption.SO_REUSEADDR, true)
                     // 是否开启 TCP 底层心跳机制
-                    .option(ChannelOption.SO_KEEPALIVE, true);
+                    .childOption(ChannelOption.SO_KEEPALIVE, true);
             // 绑定端口，同步等待绑定成功
             Channel ch = b.bind(port).sync().channel();
             //jvm中增加一个关闭的钩子 TODO 是否增加zk销毁
