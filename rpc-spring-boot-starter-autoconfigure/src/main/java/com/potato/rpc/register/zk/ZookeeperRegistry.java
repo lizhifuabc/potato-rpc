@@ -29,10 +29,6 @@ import java.util.concurrent.ConcurrentMap;
 public class ZookeeperRegistry extends AbstractRegistry {
     private final static Logger logger = LoggerFactory.getLogger(ZookeeperRegistry.class);
     /**
-     * 服务发布信息
-     */
-    private ConcurrentMap<String, ProviderInfo> providerInfoMap = new ConcurrentHashMap<String, ProviderInfo>();
-    /**
      * ZooKeeper client
      */
     private CuratorFramework zkClient;
@@ -76,12 +72,6 @@ public class ZookeeperRegistry extends AbstractRegistry {
             throw new PotatoRuntimeException("ZookeeperRegistry registry exception", e);
         }
     }
-
-    @Override
-    public ProviderInfo getProviderInfo(String serviceName) {
-        return providerInfoMap.get(serviceName);
-    }
-
     @Override
     public void destroy() {
         if (zkClient != null && zkClient.getState() == CuratorFrameworkState.STARTED) {

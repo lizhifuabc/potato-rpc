@@ -23,10 +23,6 @@ import java.util.concurrent.ConcurrentMap;
  * @date 2021/7/15
  */
 public class NacosRegistry extends AbstractRegistry {
-    /**
-     * 服务发布信息
-     */
-    private ConcurrentMap<String, ProviderInfo> providerInfoMap = new ConcurrentHashMap<String, ProviderInfo>();
     private final static Logger logger = LoggerFactory.getLogger(NacosRegistry.class);
     private NamingService namingService;
     /**
@@ -97,10 +93,5 @@ public class NacosRegistry extends AbstractRegistry {
         } catch (NacosException e) {
             throw new PotatoRuntimeException("NacosRegistry registry exception", e);
         }
-    }
-
-    @Override
-    public ProviderInfo getProviderInfo(String serviceName) {
-        return providerInfoMap.get(serviceName);
     }
 }

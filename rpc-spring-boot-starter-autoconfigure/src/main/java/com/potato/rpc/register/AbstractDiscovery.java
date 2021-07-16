@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class AbstractDiscovery implements ServiceDiscovery {
     /**
      * key: serviceName
+     * 用户缓存远程服务列表
      */
     protected Map<String, List<ProviderInfo>> SERVER_MAP = new ConcurrentHashMap<>();
     /**
