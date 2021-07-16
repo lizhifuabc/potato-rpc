@@ -1,5 +1,6 @@
 package com.potato.rpc.config;
 
+import com.potato.rpc.common.constants.PotatoServerTypeEnum;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -8,6 +9,18 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "potato.rpc")
 public class PotatoRpcConfigProperties {
+    public void setServerType(PotatoServerTypeEnum serverType) {
+        this.serverType = serverType;
+    }
+
+    public PotatoServerTypeEnum getServerType() {
+        return serverType;
+    }
+
+    /**
+     * 服务类型
+     */
+    private PotatoServerTypeEnum serverType;
     /**
      * 环境
      */
@@ -53,7 +66,7 @@ public class PotatoRpcConfigProperties {
     /**
      * 负载均衡算法
      */
-    private String loadBalance = "random";
+    private String loadBalance;
 
     public String getSerializerType() {
         return serializerType;

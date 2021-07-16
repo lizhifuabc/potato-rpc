@@ -1,5 +1,6 @@
 package com.potato.rpc.loadbalance;
 
+import com.potato.rpc.common.extension.SPI;
 import com.potato.rpc.register.ProviderInfo;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * @author lizhifu
  * @date 2021/6/25
  */
+@SPI
 public interface LoadBalancer {
     /**
      * 获取接口信息

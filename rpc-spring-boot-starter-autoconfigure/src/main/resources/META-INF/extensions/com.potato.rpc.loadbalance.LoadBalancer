@@ -1,0 +1,1 @@
+random=com.potato.rpc.loadbalance.impl.RandomLoadBalance

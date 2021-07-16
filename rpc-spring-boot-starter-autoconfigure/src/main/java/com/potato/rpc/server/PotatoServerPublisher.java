@@ -2,6 +2,7 @@ package com.potato.rpc.server;
 
 import com.potato.rpc.annotation.PotatoRpcClient;
 import com.potato.rpc.annotation.PotatoRpcServer;
+import com.potato.rpc.common.constants.PotatoServerTypeEnum;
 import com.potato.rpc.config.PotatoRpcConfigProperties;
 import com.potato.rpc.serializer.SerializerFactory;
 import com.potato.rpc.transport.PotatoServer;
@@ -40,7 +41,18 @@ public class PotatoServerPublisher implements ApplicationListener<ContextRefresh
      * @param potatoServer server
      * @param serviceRegistry register
      */
-    public PotatoServerPublisher(ClientProxyFactory clientProxyFactory, PotatoServer potatoServer, ServiceRegistry serviceRegistry, ServiceDiscovery serviceDiscovery, PotatoRpcConfigProperties potatoRpcConfigProperties){
+    public PotatoServerPublisher(ClientProxyFactory clientProxyFactory,
+                                 PotatoServer potatoServer, ServiceRegistry serviceRegistry,
+                                 ServiceDiscovery serviceDiscovery, PotatoRpcConfigProperties potatoRpcConfigProperties){
+        if(potatoRpcConfigProperties.getServerType() == null || potatoRpcConfigProperties.getServerType().equals(PotatoServerTypeEnum.ALL)){
+
+        }
+        if(potatoRpcConfigProperties.getServerType().equals(PotatoServerTypeEnum.CLIENT)){
+
+        }
+        if(potatoRpcConfigProperties.getServerType().equals(PotatoServerTypeEnum.SERVER)){
+
+        }
         this.potatoServer = potatoServer;
         this.serviceRegistry = serviceRegistry;
         this.serviceDiscovery = serviceDiscovery;

@@ -1,6 +1,8 @@
 package com.potato.rpc.proxy;
 
 import com.potato.rpc.common.exception.PotatoRuntimeException;
+import com.potato.rpc.common.extension.ExtensionLoader;
+import com.potato.rpc.config.PotatoRpcConfigProperties;
 import com.potato.rpc.register.ServiceDiscovery;
 import com.potato.rpc.serializer.SerializerFactory;
 import com.potato.rpc.transport.model.RequestMessageType;
@@ -33,11 +35,12 @@ public class ClientProxyFactory{
     private LoadBalancer loadBalancer;
     private ServiceDiscovery serviceDiscovery;
     private Map<Class<?>, Object> objectCache = new HashMap<>();
-
-    public ClientProxyFactory(PotatoClient potatoClient,LoadBalancer loadBalancer,ServiceDiscovery serviceDiscovery){
+    private PotatoRpcConfigProperties potatoRpcConfigProperties;
+    public ClientProxyFactory(PotatoClient potatoClient, PotatoRpcConfigProperties potatoRpcConfigProperties, ServiceDiscovery serviceDiscovery){
         this.potatoClient = potatoClient;
-        this.loadBalancer = loadBalancer;
         this.serviceDiscovery = serviceDiscovery;
+        this.potatoRpcConfigProperties = potatoRpcConfigProperties;
+        this.loadBalancer = ExtensionLoader.getExtensionLoader(LoadBalancer.class).getExtension(potatoRpcConfigProperties.getLoadBalance());
     }
     /**
      * 通过Java动态代理获取服务代理类
