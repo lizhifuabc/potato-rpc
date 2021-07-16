@@ -41,22 +41,30 @@ public class NettyServerHandlerAdapter extends ChannelInboundHandlerAdapter {
                     rpcMessage.setMessageType(ResponseMessageType.RESPONSE_TYPE_HEARTBEAT);
                     rpcMessage.setData("PONG");
                 }else {
-                    RpcRequest rpcRequest = (RpcRequest) rpcMessage.getData();
-                    ProviderInfo providerInfo = serviceRegistry.getProviderInfo(rpcRequest.getServiceName());
-                    Method method = null;
+                    //其他请求
                     rpcMessage.setMessageType(ResponseMessageType.RESPONSE_TYPE_NORMAL);
+                    RpcRequest rpcRequest = (RpcRequest) rpcMessage.getData();
+                    //设置响应数据
                     RpcResponse response = new RpcResponse();
-                    try {
-                        method = providerInfo.getObj().getClass().getMethod(rpcRequest.getMethod(), rpcRequest.getParameterTypes());
-                        Object returnValue = method.invoke(providerInfo.getObj(), rpcRequest.getParameters());
-                        response.setReturnValue(returnValue);
-                        response.setPotatoRpcStatusEnum(PotatoRpcStatusEnum.SUCCESS);
-                    } catch (NoSuchMethodException e) {
-                        response.setException(e);
+                    //获取服务信息
+                    ProviderInfo providerInfo = serviceRegistry.getProviderInfo(rpcRequest.getServiceName());
+                    //没有获取到服务对象
+                    if(providerInfo == null){
                         response.setPotatoRpcStatusEnum(PotatoRpcStatusEnum.NOT_FOUND);
-                    }catch (Exception e){
-                        response.setException(e);
-                        response.setPotatoRpcStatusEnum(PotatoRpcStatusEnum.ERROR);
+                    }else {
+                        Method method = null;
+                        try {
+                            method = providerInfo.getObj().getClass().getMethod(rpcRequest.getMethod(), rpcRequest.getParameterTypes());
+                            Object returnValue = method.invoke(providerInfo.getObj(), rpcRequest.getParameters());
+                            response.setReturnValue(returnValue);
+                            response.setPotatoRpcStatusEnum(PotatoRpcStatusEnum.SUCCESS);
+                        } catch (NoSuchMethodException e) {
+                            response.setException(e);
+                            response.setPotatoRpcStatusEnum(PotatoRpcStatusEnum.NOT_FOUND);
+                        }catch (Exception e){
+                            response.setException(e);
+                            response.setPotatoRpcStatusEnum(PotatoRpcStatusEnum.ERROR);
+                        }
                     }
                     rpcMessage.setData(response);
                 }
