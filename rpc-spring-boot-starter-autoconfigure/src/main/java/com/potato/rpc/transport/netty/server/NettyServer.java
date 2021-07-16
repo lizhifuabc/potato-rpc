@@ -34,6 +34,10 @@ public class NettyServer implements PotatoServer {
     private EventExecutorGroup serviceHandlerGroup;
     private ServiceRegistry serviceRegistry;
     private int port;
+    /**
+     * 主通道，用于接收和转发链接到其他工作通道
+     */
+    private Channel bossChannel;
     public NettyServer(int port,ServiceRegistry serviceRegistry){
         this.port = port;
         this.serviceRegistry = serviceRegistry;
@@ -67,8 +71,8 @@ public class NettyServer implements PotatoServer {
                     // 是否开启 TCP 底层心跳机制
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
             // 绑定端口，同步等待绑定成功
-            Channel ch = b.bind(port).sync().channel();
-            //jvm中增加一个关闭的钩子 TODO 是否增加zk销毁
+            bossChannel = b.bind(port).sync().channel();
+            //jvm中增加一个关闭的钩子
             Runtime.getRuntime().addShutdownHook(new Thread(){
                 @Override
                 public void run(){
@@ -95,6 +99,14 @@ public class NettyServer implements PotatoServer {
         shutdown();
     }
     private void shutdown(){
+        try {
+            if (bossChannel != null) {
+                //解除通道绑定
+                bossChannel.close();
+            }
+        } catch (Throwable e) {
+            logger.warn(e.getMessage(), e);
+        }
         if(bossGroup != null){
             bossGroup.shutdownGracefully();
         }
