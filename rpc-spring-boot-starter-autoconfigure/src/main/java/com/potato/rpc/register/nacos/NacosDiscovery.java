@@ -90,8 +90,8 @@ public class NacosDiscovery extends AbstractDiscovery {
                 providerInfoList.add(providerInfo);
             });
             namingService.subscribe(serviceName,registryConfig.getEnv(), event -> {
-                logger.info("NamingEvent event:{}",event.toString());
                 if (event instanceof NamingEvent) {
+                    logger.info("NamingEvent event:{}",((NamingEvent) event).getServiceName());
                     discovery(((NamingEvent) event).getServiceName());
                 }
             });
