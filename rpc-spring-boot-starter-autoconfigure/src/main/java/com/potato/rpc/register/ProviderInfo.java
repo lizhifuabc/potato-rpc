@@ -2,6 +2,8 @@ package com.potato.rpc.register;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.time.LocalDateTime;
+
 /**
  * 服务提供信息
  *
@@ -34,6 +36,10 @@ public class ProviderInfo {
      */
     private int weight;
     /**
+     * 启动时间
+     */
+    private long upTime;
+    /**
      * 是否可用1:可用，0：不可用
      */
     private int enable;
@@ -45,7 +51,10 @@ public class ProviderInfo {
     public void setSerializerType(String serializerType) {
         this.serializerType = serializerType;
     }
-
+    public ProviderInfo(){
+        this.upTime = System.currentTimeMillis();
+        this.enable = 1;
+    }
     /**
      * json数据
      * @return json格式数据
@@ -54,8 +63,17 @@ public class ProviderInfo {
         JSONObject jsonChildData = new JSONObject();
         jsonChildData.put("weight", weight);
         jsonChildData.put("enable", enable);
+        jsonChildData.put("upTime", upTime);
         jsonChildData.put("serializerType", serializerType);
         return jsonChildData.toJSONString();
+    }
+
+    public long getUpTime() {
+        return upTime;
+    }
+
+    public void setUpTime(long upTime) {
+        this.upTime = upTime;
     }
 
     public String getServiceName() {

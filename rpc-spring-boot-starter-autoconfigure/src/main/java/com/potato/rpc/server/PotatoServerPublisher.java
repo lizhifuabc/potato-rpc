@@ -135,8 +135,7 @@ public class PotatoServerPublisher implements ApplicationListener<ContextRefresh
             providerInfo.setServiceName(serviceName);
             providerInfo.setIp(ip);
             providerInfo.setWeight(10);
-            providerInfo.setEnable(1);
-            providerInfo.setPort(potatoRpcConfigProperties.getPort());
+            providerInfo.setPort(potatoRpcConfigProperties.getServerPort());
             providerInfo.setObj(obj);
             providerInfo.setSerializerType(SerializerFactory.INSTANCE.getSerializerType());
             serviceRegistry.register(providerInfo);

@@ -54,7 +54,7 @@ public class PotatoRpcConfigProperties {
     /**
      * 服务暴露端口
      */
-    private int port = 9999;
+    private int serverPort;
     /**
      * 服务协议
      */
@@ -92,12 +92,12 @@ public class PotatoRpcConfigProperties {
         this.registerAddress = registerAddress;
     }
 
-    public int getPort() {
-        return port;
+    public int getServerPort() {
+        return serverPort;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
     }
 
     public String getProtocol() {

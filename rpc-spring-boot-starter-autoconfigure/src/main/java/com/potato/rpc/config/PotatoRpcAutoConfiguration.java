@@ -1,10 +1,7 @@
 package com.potato.rpc.config;
 
-import com.potato.rpc.loadbalance.LoadBalancer;
-import com.potato.rpc.loadbalance.impl.RandomLoadBalance;
 import com.potato.rpc.register.nacos.NacosDiscovery;
 import com.potato.rpc.register.nacos.NacosRegistry;
-import com.potato.rpc.serializer.kryo.KryoSerializer;
 import com.potato.rpc.transport.PotatoClient;
 import com.potato.rpc.transport.netty.client.NettyClient;
 import com.potato.rpc.proxy.ClientProxyFactory;
@@ -54,7 +51,7 @@ public class PotatoRpcAutoConfiguration {
     }
     @Bean
     public PotatoServer nettyServer(@Autowired ServiceRegistry serviceRegistry) {
-        return new NettyServer(potatoRpcConfigProperties.getPort(),serviceRegistry);
+        return new NettyServer(potatoRpcConfigProperties.getServerPort(),serviceRegistry);
     }
     @Bean
     public ClientProxyFactory clientProxyFactory( @Autowired ServiceDiscovery serviceDiscovery,
