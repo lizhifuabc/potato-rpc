@@ -2,17 +2,15 @@ package com.potato.rpc.transport.netty.server;
 
 import com.potato.rpc.register.ServiceRegistry;
 import com.potato.rpc.transport.PotatoServer;
-import com.potato.rpc.server.ServerPublisherConfig;
+import com.potato.rpc.transport.netty.NettyEventLoopFactory;
 import com.potato.rpc.util.SysUtil;
 import com.potato.rpc.util.ThreadPoolFactoryUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
-import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
@@ -44,16 +42,11 @@ public class NettyServer implements PotatoServer {
     }
     @Override
     public void start() {
+        bossGroup = NettyEventLoopFactory.eventLoopGroup(1, "NettyServerBoss");
+        // TODO duboo
+        workerGroup = NettyEventLoopFactory.eventLoopGroup(Math.min(Runtime.getRuntime().availableProcessors() + 1, 32), "NettyServerWorker");
+
         try {
-            if(Epoll.isAvailable()) {
-                logger.info("netty server bossGroup workerGroup is epoll");
-                bossGroup = new EpollEventLoopGroup(ServerPublisherConfig.DEFAULT_EVENT_LOOP_THREADS);
-                workerGroup = new EpollEventLoopGroup(ServerPublisherConfig.DEFAULT_EVENT_LOOP_THREADS * 2);
-            } else {
-                logger.info("netty server bossGroup workerGroup is common");
-                bossGroup = new NioEventLoopGroup(ServerPublisherConfig.DEFAULT_EVENT_LOOP_THREADS);
-                workerGroup = new NioEventLoopGroup(ServerPublisherConfig.DEFAULT_EVENT_LOOP_THREADS * 2);
-            }
             serviceHandlerGroup = new DefaultEventExecutorGroup(
                     SysUtil.cpus() * 2,
                     ThreadPoolFactoryUtil.createThreadFactory("service-handler-group", false)
