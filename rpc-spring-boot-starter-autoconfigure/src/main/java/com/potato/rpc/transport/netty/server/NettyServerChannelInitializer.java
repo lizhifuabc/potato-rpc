@@ -30,6 +30,6 @@ public class NettyServerChannelInitializer extends ChannelInitializer<SocketChan
         socketChannel.pipeline().addLast(new NettyDecoder());
         socketChannel.pipeline().addLast(new NettyEncoder());
         //创建一个EventExecutorGroup并将其和channelHandler绑定
-        socketChannel.pipeline().addLast(eventExecutorGroup,new NettyServerHandlerAdapter(serviceRegistry));
+        socketChannel.pipeline().addLast(eventExecutorGroup,new NettyServerHandler(serviceRegistry));
     }
 }

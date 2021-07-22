@@ -8,9 +8,7 @@ import com.potato.rpc.transport.model.ResponseMessageType;
 import com.potato.rpc.transport.model.RpcMessage;
 import com.potato.rpc.transport.model.RpcRequest;
 import com.potato.rpc.transport.model.RpcResponse;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.*;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.ReferenceCountUtil;
@@ -18,6 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.net.InetSocketAddress;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * netty服务端
@@ -25,12 +26,31 @@ import java.lang.reflect.Method;
  * @author lizhifu
  * @date 2021/6/28
  */
-public class NettyServerHandlerAdapter extends ChannelInboundHandlerAdapter {
-    private final static Logger logger = LoggerFactory.getLogger(NettyServerHandlerAdapter.class);
+@ChannelHandler.Sharable
+public class NettyServerHandler extends ChannelInboundHandlerAdapter {
+    private final static Logger logger = LoggerFactory.getLogger(NettyServerHandler.class);
+    /**
+     * workChannels
+     */
+    private ConcurrentMap<String, Channel> workChannels = new ConcurrentHashMap<>();
+
     private ServiceRegistry serviceRegistry;
-    public NettyServerHandlerAdapter(ServiceRegistry serviceRegistry){
+    public NettyServerHandler(ServiceRegistry serviceRegistry){
         this.serviceRegistry = serviceRegistry;
     }
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        logger.info("The connection of " + getChannelKey(ctx) + " is registered.");
+        workChannels.put(getChannelKey(ctx),ctx.channel());
+        ctx.fireChannelRegistered();
+    }
+    @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+        logger.info("The connection of " + getChannelKey(ctx) + " is unregistered.");
+        workChannels.remove(getChannelKey(ctx));
+        ctx.fireChannelUnregistered();
+    }
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         try {
@@ -93,5 +113,31 @@ public class NettyServerHandlerAdapter extends ChannelInboundHandlerAdapter {
         logger.error("server catch exception",cause);
         cause.printStackTrace();
         ctx.close();
+    }
+    /**
+     * 获取map的key
+     * key:remote address + local address 作为连接的唯一标示
+     *
+     * @param ctx ChannelHandlerContext
+     * @return
+     */
+    private String getChannelKey(ChannelHandlerContext ctx) {
+        Channel channel = ctx.channel();
+        InetSocketAddress local = (InetSocketAddress) channel.localAddress();
+        InetSocketAddress remote = (InetSocketAddress) channel.remoteAddress();
+        String key = "";
+        if (local == null || local.getAddress() == null) {
+            key += "null-";
+        } else {
+            key += local.getAddress().getHostAddress() + ":" + local.getPort() + "-";
+        }
+
+        if (remote == null || remote.getAddress() == null) {
+            key += "null";
+        } else {
+            key += remote.getAddress().getHostAddress() + ":" + remote.getPort();
+        }
+
+        return key;
     }
 }

@@ -1,11 +1,11 @@
 package com.potato.rpc.transport.netty.client;
 
-import com.potato.rpc.serializer.SerializerFactory;
 import com.potato.rpc.transport.model.RequestMessageType;
 import com.potato.rpc.transport.model.ResponseMessageType;
 import com.potato.rpc.transport.model.RpcMessage;
 import com.potato.rpc.util.RandomUtil;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
@@ -21,8 +21,9 @@ import org.slf4j.LoggerFactory;
  * @author lizhifu
  * @date 2021/7/6
  */
-public class NettyClientHandlerAdapter extends ChannelInboundHandlerAdapter {
-    private final static Logger logger = LoggerFactory.getLogger(NettyClientHandlerAdapter.class);
+@ChannelHandler.Sharable
+public class NettyClientHandler extends ChannelInboundHandlerAdapter {
+    private final static Logger logger = LoggerFactory.getLogger(NettyClientHandler.class);
 
     /**
      * 服务端返回的数据

@@ -23,6 +23,6 @@ public class NettyClientChannelInitializer extends ChannelInitializer<SocketChan
         p.addLast(new IdleStateHandler(0, 5, 0, TimeUnit.SECONDS));
         p.addLast(new NettyEncoder());
         p.addLast(new NettyDecoder());
-        p.addLast(new NettyClientHandlerAdapter());
+        p.addLast(new NettyClientHandler());
     }
 }
